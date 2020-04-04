@@ -1,0 +1,18 @@
+# Example provider
+
+[![Build Status](https://travis-ci.com/pactflow/example-provider.svg?branch=master)](https://travis-ci.com/pactflow/example-provider)
+
+This is an example of a Node provider using Pact and [Pactflow](https://pactflow.io) to ensure that it is compatible with the expectations its consumers have of it.
+
+It is using a public tenant on Pactflow, which you can access [here](https://test.pact.dius.com.au) using the credentials `dXfltyFMgNOFZAxr8io9wJ37iUpY42M`/`O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1`.
+
+The build "pipeline" is simulated with a Makefile, and performs the following tasks:
+
+* Upsert webhook to allow the verification to run whenever a consumer's contract changes
+* Run unit tests
+* Run pact verification tests (including publishing verification results)
+* Check if we are safe to deploy (ie. has the pact content been successfully verified)
+* Deploy
+* Tag the deployed version
+
+If the PACT_URL environment variable is set, then we know that this build has been triggered by a 'contract content changed' webhook, so we only run the pact verification tests for that particular pact (see the switch in the `-script` node of [.travis.yml](.travis.yml) and the logic for setting up the `opts` in [product/product.pact.test.js](product/product.pact.test.js)). The switch in the .travis.yml is a bit of a hack because Travis only lets us have one pipeline per repository - usually you would define a completely separate job in your CI for the pact changed webhook.
