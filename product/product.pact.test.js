@@ -50,7 +50,12 @@ describe("Pact Verification", () => {
         },
     };
 
-    return new Verifier(opts).verifyProvider().finally(() => {
+    return new Verifier(opts).verifyProvider()
+      .then(output => {
+        console.log("Pact Verification Complete!")
+        console.log(output)
+      })
+      .finally(() => {
         server.close();
     });
   })
