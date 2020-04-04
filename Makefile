@@ -1,6 +1,14 @@
 PACTICIPANT := "pactflow-example-provider"
 
-all: test deploy
+all: setup_webhook test deploy
+
+# export TRAVIS_TOKEN first and run this once before you do anything
+create_travis_token_secret:
+	curl -v -X POST ${PACT_BROKER_BASE_URL}/secrets \
+	-u ${PACT_BROKER_USERNAME}:${PACT_BROKER_PASSWORD} \
+	-H "Content-Type: application/json" \
+	-H "Accept: application/hal+json" \
+	-d  "{\"name\":\"travisToken\",\"description\":\"Travis CI Provider Build Token\",\"value\":\"${TRAVIS_TOKEN}\"}"
 
 setup_webhook:
 	docker run --rm \
@@ -11,7 +19,7 @@ setup_webhook:
 	  pactfoundation/pact-cli:latest \
 	  broker create-or-update-webhook \
 	  https://api.travis-ci.com/repo/pactflow%2Fexample-provider/requests \
-	  --header "Content-Type: application/json" "Accept: application/json" "Travis-API-Version: 3" "Authorization: token TOKEN" \
+	  --header "Content-Type: application/json" "Accept: application/json" "Travis-API-Version: 3" 'Authorization: token $${user.travisToken}' \
 	  --request POST \
 	  --data @${PWD}/pactflow/travis-ci-webhook.json \
 	  --uuid c76b601e-d66a-4eb1-88a4-6ebc50c0df8b \

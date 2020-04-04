@@ -1,6 +1,10 @@
 {
   "request": {
     "message": "Triggered by changed pact for ${pactbroker.consumerName} version ${pactbroker.consumerVersionNumber}",
-    "branch":"master"
+    "branch":"master",
+    "env": [
+      "MAKE_TARGET=verify",
+      "PACT_URL=${pactbroker.pactUrl}"
+    ]
   }
 }

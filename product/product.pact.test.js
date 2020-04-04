@@ -11,16 +11,32 @@ const server = app.listen("8080");
 
 describe("Pact Verification", () => {
   it("validates the expectations of ProductService", () => {
+    const sharedOpts = {
+      logLevel: "INFO",
+      providerBaseUrl: "http://localhost:8080",
+      providerVersion: process.env.TRAVIS_COMMIT,
+      providerVersionTag: process.env.TRAVIS_BRANCH,
+      pactBrokerUsername: process.env.PACT_BROKER_USERNAME,
+      pactBrokerPassword: process.env.PACT_BROKER_PASSWORD
+    }
+
+    // For normal provider builds, fetch all pacts for this provider
+    const fetchPactsDynamicallyOpts = {
+      provider: "pactflow-example-provider",
+      consumerVersionTag: ['master'],
+      pactBrokerUrl: process.env.PACT_BROKER_BASE_URL
+    }
+
+    // For builds triggered by a 'contract content changed' webhook,
+    // just verify the changed pact. The URL will bave been passed in
+    // from the webhook to the CI job.
+    const pactChangedOpts = {
+      pactUrls: [process.env.PACT_URL]
+    }
+
     const opts = {
-        logLevel: "INFO",
-        providerBaseUrl: "http://localhost:8080",
-        provider: "pactflow-example-provider",
-        providerVersion: process.env.TRAVIS_COMMIT,
-        consumerVersionTag: ['master'],
-        providerVersionTag: process.env.TRAVIS_BRANCH,
-        pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
-        pactBrokerUsername: process.env.PACT_BROKER_USERNAME,
-        pactBrokerPassword: process.env.PACT_BROKER_PASSWORD,
+        ...sharedOpts,
+        ...(process.env.PACT_URL ? pactChangedOpts : fetchPactsDynamicallyOpts),
         stateHandlers: {
           "product with ID 10 exists": () => {
             controller.repository.products = new Map([
