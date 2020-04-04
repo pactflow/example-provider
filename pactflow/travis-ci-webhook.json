@@ -2,9 +2,13 @@
   "request": {
     "message": "Triggered by changed pact for ${pactbroker.consumerName} version ${pactbroker.consumerVersionNumber}",
     "branch":"master",
-    "env": [
-      "MAKE_TARGET=verify",
-      "PACT_URL=${pactbroker.pactUrl}"
-    ]
+    "merge_mode": "deep_merge_append",
+    "config": {
+      "env": {
+        "global": [
+          "PACT_URL=${pactbroker.pactUrl}"
+        ]
+      }
+    }
   }
 }

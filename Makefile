@@ -1,4 +1,5 @@
 PACTICIPANT := "pactflow-example-provider"
+WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
 
 all: setup_webhook test deploy
 
@@ -22,10 +23,13 @@ setup_webhook:
 	  --header "Content-Type: application/json" "Accept: application/json" "Travis-API-Version: 3" 'Authorization: token $${user.travisToken}' \
 	  --request POST \
 	  --data @${PWD}/pactflow/travis-ci-webhook.json \
-	  --uuid c76b601e-d66a-4eb1-88a4-6ebc50c0df8b \
+	  --uuid ${WEBHOOK_UUID} \
 	  --provider ${PACTICIPANT} \
 	  --contract-content-changed \
 	  --description "Travis CI webhook for ${PACTICIPANT}"
+
+test_webhook:
+	curl -v -X POST ${PACT_BROKER_BASE_URL}/webhooks/${WEBHOOK_UUID}/execute -u ${PACT_BROKER_USERNAME}:${PACT_BROKER_PASSWORD}
 
 test:
 	npm run test:pact

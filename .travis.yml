@@ -9,7 +9,9 @@ env:
     - PACT_BROKER_USERNAME=dXfltyFMgNOFZAxr8io9wJ37iUpY42M
     - PACT_BROKER_PASSWORD=O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1
     - PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true
-    - MAKE_TARGET=all
 script:
-  # When a webhook triggers this, it sets the MAKE_TARGET to 'verify'
-  - make ${MAKE_TARGET}
+  # When a webhook triggers this, PACT_URL will be set
+  # Otherwise, run the normal build.
+  # This is just to get around the fact that
+  # Travis CI only has one pipeline per repository
+  - if [ -z "${PACT_URL}" ]; then make all; else make verify; fi
