@@ -1,0 +1,6 @@
+{
+  "request": {
+    "message": "Triggered by changed pact for ${pactbroker.consumerName} version ${pactbroker.consumerVersionNumber}",
+    "branch":"master"
+  }
+}
