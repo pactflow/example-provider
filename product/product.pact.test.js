@@ -22,7 +22,7 @@ describe("Pact Verification", () => {
     // For normal provider builds, fetch all pacts for this provider
     const fetchPactsDynamicallyOpts = {
       provider: "pactflow-example-provider",
-      consumerVersionTag: ['master'],
+      consumerVersionTag: ['master', 'prod'],
       pactBrokerUrl: process.env.PACT_BROKER_BASE_URL
     }
 
