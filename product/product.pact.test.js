@@ -16,8 +16,7 @@ describe("Pact Verification", () => {
       providerBaseUrl: "http://localhost:8080",
       providerVersion: process.env.TRAVIS_COMMIT,
       providerVersionTag: process.env.TRAVIS_BRANCH,
-      pactBrokerUsername: process.env.PACT_BROKER_USERNAME,
-      pactBrokerPassword: process.env.PACT_BROKER_PASSWORD
+      enablePending: true
     }
 
     // For normal provider builds, fetch all pacts for this provider

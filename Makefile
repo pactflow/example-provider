@@ -43,7 +43,7 @@ can_i_deploy:
 	  broker can-i-deploy \
 	  --pacticipant ${PACTICIPANT} \
 	  --version ${TRAVIS_COMMIT} \
-	  --to
+	  --to prod
 
 deploy_app:
 	echo "Deploying to prod"
