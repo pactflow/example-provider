@@ -14,4 +14,11 @@ script:
   # Otherwise, run the normal build.
   # This is just to get around the fact that
   # Travis CI only has one pipeline per repository
-  - if [ -z "${PACT_URL}" ]; then make all; else make test; fi
+  - >
+    if [ -z "${PACT_URL}" ]; then
+      make prepare_pactflow
+      make test
+      if [ "${TRAVIS_BRANCH}" == 'master' ]; then make deploy; fi
+    else
+      make test
+    fi

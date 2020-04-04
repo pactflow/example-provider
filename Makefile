@@ -1,7 +1,9 @@
 PACTICIPANT := "pactflow-example-provider"
 WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
 
-all: create_or_update_travis_webhook test deploy
+all: test
+
+prepare_pactflow: create_or_update_travis_webhook
 
 # export TRAVIS_TOKEN first and run this once before you do anything
 create_travis_token_secret:
