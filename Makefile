@@ -3,7 +3,7 @@ WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
 
 all: test
 
-prepare_pactflow: create_or_update_travis_webhook
+prepare_pactflow: docker_pull create_or_update_travis_webhook
 
 # export TRAVIS_TOKEN first and run this once before you do anything
 create_travis_token_secret:
@@ -62,3 +62,7 @@ tag_as_prod:
 	  --tag prod
 
 deploy: can_i_deploy deploy_app tag_as_prod
+
+# Pulling before running just makes the output a bit cleaner
+docker_pull:
+	docker pull pactfoundation/pact-cli:latest
