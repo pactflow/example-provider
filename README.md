@@ -1,4 +1,4 @@
-# Example provider
+# Example Provider
 
 [![Build Status](https://travis-ci.com/pactflow/example-provider.svg?branch=master)](https://travis-ci.com/pactflow/example-provider)
 
