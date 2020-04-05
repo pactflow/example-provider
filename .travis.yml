@@ -9,5 +9,16 @@ env:
     - PACT_BROKER_USERNAME=dXfltyFMgNOFZAxr8io9wJ37iUpY42M
     - PACT_BROKER_PASSWORD=O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1
     - PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true
+before_script:
+  - docker pull pactfoundation/pact-cli:latest
 script:
-  - make ci
+  # When a webhook triggers a build, the PACT_URL will be set. In this case, just run the verification step.
+  # Otherwise, run the normal build.
+  # This is just to get around the fact that Travis CI only has one build definition per repository.
+  # Normally you would define a separate job for the webhook triggered verification.
+  - >
+    if [ -z "${PACT_URL}" ]; then
+      make ci_main_pipeline
+    else
+      make ci_verify
+    fi
