@@ -29,8 +29,7 @@ deploy: can_i_deploy deploy_app tag_as_prod
 can_i_deploy:
 	@docker run --rm \
 	 -e PACT_BROKER_BASE_URL \
-	 -e PACT_BROKER_USERNAME \
-	 -e PACT_BROKER_PASSWORD \
+	 -e PACT_BROKER_TOKEN \
 	  pactfoundation/pact-cli:latest \
 	  broker can-i-deploy \
 	  --pacticipant ${PACTICIPANT} \
@@ -43,8 +42,7 @@ deploy_app:
 tag_as_prod:
 	@docker run --rm \
 	 -e PACT_BROKER_BASE_URL \
-	 -e PACT_BROKER_USERNAME \
-	 -e PACT_BROKER_PASSWORD \
+	 -e PACT_BROKER_TOKEN \
 	  pactfoundation/pact-cli:latest \
 	  broker create-version-tag \
 	  --pacticipant ${PACTICIPANT} \
@@ -58,7 +56,7 @@ tag_as_prod:
 # export TRAVIS_TOKEN first and run this once before you create the webhook
 create_travis_token_secret:
 	@curl -v -X POST ${PACT_BROKER_BASE_URL}/secrets \
-	-u ${PACT_BROKER_USERNAME}:${PACT_BROKER_PASSWORD} \
+	-H "Authorization: Bearer ${PACT_BROKER_TOKEN}" \
 	-H "Content-Type: application/json" \
 	-H "Accept: application/hal+json" \
 	-d  "{\"name\":\"travisToken\",\"description\":\"Travis CI Provider Build Token\",\"value\":\"${TRAVIS_TOKEN}\"}"
@@ -66,8 +64,7 @@ create_travis_token_secret:
 create_or_update_travis_webhook:
 	@docker run --rm \
 	 -e PACT_BROKER_BASE_URL \
-	 -e PACT_BROKER_USERNAME \
-	 -e PACT_BROKER_PASSWORD \
+	 -e PACT_BROKER_TOKEN \
 	 -v ${PWD}:${PWD} \
 	  pactfoundation/pact-cli:latest \
 	  broker create-or-update-webhook \
@@ -81,4 +78,4 @@ create_or_update_travis_webhook:
 	  --description "Travis CI webhook for ${PACTICIPANT}"
 
 test_travis_webhook:
-	@curl -v -X POST ${PACT_BROKER_BASE_URL}/webhooks/${WEBHOOK_UUID}/execute -u ${PACT_BROKER_USERNAME}:${PACT_BROKER_PASSWORD}
+	@curl -v -X POST ${PACT_BROKER_BASE_URL}/webhooks/${WEBHOOK_UUID}/execute -H "Authorization: Bearer ${PACT_BROKER_TOKEN}"
