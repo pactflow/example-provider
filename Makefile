@@ -1,15 +1,20 @@
 PACTICIPANT := "pactflow-example-provider"
 WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
 
+# Only deploy from master
+ifeq ($(TRAVIS_BRANCH),master)
+	DEPLOY_TARGET=deploy
+else
+	DEPLOY_TARGET=no_deploy
+endif
+
 all: test
 
 ## ====================
 ## CI tasks
 ## ====================
 
-# Only deploy from master
-ci_main_pipeline: test
-	@if [ "${TRAVIS_BRANCH}" = "master" ]; then echo "Attempting to deploy" && make deploy; else echo "Not deploying as not on master branch"; fi
+ci_main_pipeline: test $(DEPLOY_TARGET)
 
 ci_verify: test
 
@@ -25,6 +30,9 @@ test:
 ## =====================
 
 deploy: can_i_deploy deploy_app tag_as_prod
+
+no_deploy:
+	@echo "Not deploying as not on master branch"
 
 can_i_deploy:
 	@docker run --rm \
