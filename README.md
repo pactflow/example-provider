@@ -25,7 +25,7 @@ Because Travis CI only allows us to have one build configuration per repository,
 
 * In [.travis.yml](.travis.yml)
     * Our PACT_BROKER_TOKEN environment variable is encrypted. This is a read/write token. For normal development use, you would use a read only token, as you would not be publishing verification results from your local machine.
-    * In the `script` section, we switch between running the target for the normal provider build pipeline, and the webhook-triggered pact verification target, based on whether or not the PACT_URL is set. The PACT_URL will be set when this build has been trigged by a 'contract content changed' webhook (more on this later). This switch is just required because Travis only lets us have one build configuration file per repository - usually you would define a completely separate job in your CI for the pact changed webhook.
+    * In the `script` section, we switch between running the target for the normal provider build pipeline, and the webhook-triggered pact verification target, based on whether or not the `$PACT_URL` is set. The `$PACT_URL` will be set when this build has been trigged by a 'contract content changed' webhook (more on this later). This switch is just required because Travis only lets us have one build configuration file per repository - usually you would define a completely separate job in your CI for the pact changed webhook.
 
 * In the [Makefile](Makefile):
     * The target `create_or_update_travis_webhook` creates the Pactflow webhook that will trigger a build of the provider when any of its consumers publishes a pact with changed content.
@@ -40,7 +40,7 @@ Because Travis CI only allows us to have one build configuration per repository,
 
 * In [product/product.pact.test.js](product/product.pact.test.js):
     * When the `$PACT_URL` is not set (ie. the build is running because the provider changed), the provider is configured to fetch all the pacts for the 'example-provider' provider which belong to the latest consumer versions tagged with `master` and `prod`. This ensures the provider is compatible with the latest changes that the consumer has made, and is also backwards compatible with the production version of the consumer.
-    * When the `$PACT_URL` is set (ie. the build is running because it was triggered by the 'contract content changed' webhook), we just verify the pact at the `${PACT_URL}`.
+    * When the `$PACT_URL` is set (ie. the build is running because it was triggered by the 'contract content changed' webhook), we just verify the pact at the `$PACT_URL`.
     * Pact-JS has a very flexible verification task configuration that allows us to use the same code for both the main pipeline verifications and the webhook-triggered verifications, with dynamically set options. Depending on your pact implementation, you may need to define separate tasks for each of these concerns.
     * When we publish the verification results, we use the git sha as the provider version number, and the branch name as the provider version tag. You can read more about versioning [here](https://docs.pact.io/getting_started/versioning_in_the_pact_broker).
 
