@@ -29,7 +29,7 @@ Because Travis CI only allows us to have one build configuration per repository,
 
 * In the [Makefile](Makefile):
     * The target `create_or_update_travis_webhook` creates the Pactflow webhook that will trigger a build of the provider when any of its consumers publishes a pact with changed content.
-    * To call the Travis API that triggers the build, the webhook uses a bearer token that is stored in a Pactflow secret called `${user.travisToken}`. The secret can be created using the `create_travis_token_secret` target, or though the Pactflow UI.
+    * To call the Travis API that triggers the build, the webhook uses a bearer token that is stored in a Pactflow secret called `${user.travisToken}`. The secret can be created using the `create_travis_token_secret` target, or through the Pactflow UI.
     * The target `ci_main_pipeline` runs when the provider has a new commit. It performs the following tasks:
         * Run the isolated tests (including the pact verification tests, which publish the verification results)
         * If we are on master:
