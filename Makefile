@@ -16,14 +16,15 @@ all: test
 
 ci_main_pipeline: test $(DEPLOY_TARGET)
 
-ci_verify: test
+ci_verify:
+	npm run test:pact
 
 ## =====================
 ## Build/test tasks
 ## =====================
 
 test:
-	npm run test:pact
+	npm run test
 
 ## =====================
 ## Deploy tasks
