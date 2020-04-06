@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node server.js",
-    "test": "npx jest",
+    "test": "npx jest --testTimeout 30000",
     "test:pact": "npx jest --testTimeout 30000 --testMatch \"**/*.pact.test.js\""
   },
   "dependencies": {
