@@ -62,7 +62,8 @@ tag_as_prod:
 ## Pactflow set up tasks
 ## =====================
 
-# export TRAVIS_TOKEN first and run this once before you create the webhook
+# export the TRAVIS_TOKEN environment variable before running this
+# You can get your token from the Settings tab of https://travis-ci.com/account/preferences
 create_travis_token_secret:
 	@curl -v -X POST ${PACT_BROKER_BASE_URL}/secrets \
 	-H "Authorization: Bearer ${PACT_BROKER_TOKEN}" \
@@ -70,6 +71,8 @@ create_travis_token_secret:
 	-H "Accept: application/hal+json" \
 	-d  "{\"name\":\"travisToken\",\"description\":\"Travis CI Provider Build Token\",\"value\":\"${TRAVIS_TOKEN}\"}"
 
+# NOTE: the travis token secret must be created (either through the UI or using the
+# `create_travis_token_secret` target) before the webhook is invoked.
 create_or_update_travis_webhook:
 	@docker run --rm \
 	 -e PACT_BROKER_BASE_URL \

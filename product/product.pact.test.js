@@ -11,19 +11,11 @@ const server = app.listen("8080");
 
 describe("Pact Verification", () => {
   it("validates the expectations of ProductService", () => {
-    const sharedOpts = {
+    const baseOpts = {
       logLevel: "INFO",
       providerBaseUrl: "http://localhost:8080",
       providerVersion: process.env.TRAVIS_COMMIT,
-      providerVersionTag: process.env.TRAVIS_BRANCH,
-      enablePending: true
-    }
-
-    // For normal provider builds, fetch all pacts for this provider
-    const fetchPactsDynamicallyOpts = {
-      provider: "pactflow-example-provider",
-      consumerVersionTag: ['master', 'prod'],
-      pactBrokerUrl: process.env.PACT_BROKER_BASE_URL
+      providerVersionTag: process.env.TRAVIS_BRANCH
     }
 
     // For builds triggered by a 'contract content changed' webhook,
@@ -33,8 +25,16 @@ describe("Pact Verification", () => {
       pactUrls: [process.env.PACT_URL]
     }
 
+    // For 'normal' provider builds, fetch `master` and `prod` pacts for this provider
+    const fetchPactsDynamicallyOpts = {
+      provider: "pactflow-example-provider",
+      consumerVersionTag: ['master', 'prod'],
+      pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
+      enablePending: false
+    }
+
     const opts = {
-        ...sharedOpts,
+        ...baseOpts,
         ...(process.env.PACT_URL ? pactChangedOpts : fetchPactsDynamicallyOpts),
         stateHandlers: {
           "product with ID 10 exists": () => {
