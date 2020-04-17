@@ -90,4 +90,20 @@ create_or_update_travis_webhook:
 	  --description "Travis CI webhook for ${PACTICIPANT}"
 
 test_travis_webhook:
-	@curl -v -X POST ${PACT_BROKER_BASE_URL}/webhooks/${WEBHOOK_UUID}/execute -H "Authorization: Bearer ${PACT_BROKER_TOKEN}"
+	@docker run --rm \
+	 -e PACT_BROKER_BASE_URL \
+	 -e PACT_BROKER_TOKEN \
+	 -v ${PWD}:${PWD} \
+	  pactfoundation/pact-cli:latest \
+	  broker test-webhook \
+	  --uuid ${WEBHOOK_UUID}
+
+## ======================
+## Travis CI set up tasks
+## ======================
+
+travis_login:
+	@docker run --rm -v ${HOME}/.travis:/root/.travis -it lirantal/travis-cli login --pro
+
+travis_encrypt_pact_broker_token:
+	@docker run --rm -v ${HOME}/.travis:/root/.travis -v ${PWD}:${PWD} --workdir ${PWD} lirantal/travis-cli encrypt --pro PACT_BROKER_TOKEN="${PACT_BROKER_TOKEN}"

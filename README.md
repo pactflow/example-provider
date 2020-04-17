@@ -10,14 +10,14 @@ It is using a public tenant on Pactflow, which you can access [here](https://tes
 
 ## Pact verifications
 
-When using Pact in a CI/CD pipeline, there are two reasons for the pact verification to take place:
+When using Pact in a CI/CD pipeline, there are two reasons for a pact verification task to take place:
 
    * When the provider changes (to make sure it does not break any existing consumer expectations)
    * When a pact changes (to see if the provider is compatible with the new expectations)
 
-When the provider changes, the pact verification runs as part the provider's normal build pipeline, generally after the unit tests, and before any deployment takes place. The pact verification task is configured to dynamically fetch all the relevant pacts for the specified provider from Pactflow, verify them, and publish the results back to Pactflow.
+When the provider changes, the pact verification task runs as part the provider's normal build pipeline, generally after the unit tests, and before any deployment takes place. This pact verification task is configured to dynamically fetch all the relevant pacts for the specified provider from Pactflow, verify them, and publish the results back to Pactflow.
 
-To ensure that a verification is also run whenever a pact changes, we create a webhook in Pactflow that triggers a provider build, and passes in the URL of the changed pact. Ideally, this should be a completely separate build from your normal provider pipeline, and it should just verify the changed pact.
+To ensure that a verification is also run whenever a pact changes, we create a webhook in Pactflow that triggers a provider build, and passes in the URL of the changed pact. Ideally, this would be a completely separate build from your normal provider pipeline, and it should just verify the changed pact.
 
 Because Travis CI only allows us to have one build configuration per repository, we switch between the main pipeline mode and the webhook-triggered mode based on the presence of an environment variable that is only set via the webhook. Keep in mind that this is just a constraint of the tools we're using for this example, and is not necessarily the way you would implement Pact your own pipeline.
 
@@ -46,23 +46,4 @@ Because Travis CI only allows us to have one build configuration per repository,
 
 ## Usage
 
-### Set up
-
-TBC - flesh out each step.
-
-1. Fork consumer and provider projects
-1. Create a Pactflow account
-1. Update the env vars with the new Pactflow account details
-1. Set up Travis CI
-    1. `travis login --pro`
-    1. Encrypt new PACT_BROKER_TOKEN
-1. Push consumer and provider repos
-1. Create provider webhook
-
-## Consumer changed workflow
-
-TBC. Cover pending flag.
-
-## Provider changed workflow
-
-TBC.
+See the [Pactflow CI/CD Workshop](https://github.com/pactflow/ci-cd-workshop).
