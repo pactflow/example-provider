@@ -1,5 +1,6 @@
 PACTICIPANT := "pactflow-example-provider"
 WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
+TRIGGER_PROVIDER_BUILD_URL := "https://api.travis-ci.com/repo/pactflow%2Fexample-provider/requests"
 
 # Only deploy from master
 ifeq ($(TRAVIS_BRANCH),master)
@@ -80,7 +81,7 @@ create_or_update_travis_webhook:
 	 -v ${PWD}:${PWD} \
 	  pactfoundation/pact-cli:latest \
 	  broker create-or-update-webhook \
-	  https://api.travis-ci.com/repo/pactflow%2Fexample-provider/requests \
+	  "${TRIGGER_PROVIDER_BUILD_URL}" \
 	  --header "Content-Type: application/json" "Accept: application/json" "Travis-API-Version: 3" 'Authorization: token $${user.travisToken}' \
 	  --request POST \
 	  --data @${PWD}/pactflow/travis-ci-webhook.json \
