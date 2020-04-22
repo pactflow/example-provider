@@ -17,8 +17,8 @@ script:
   # This is just to get around the fact that Travis CI only has one build definition per repository.
   # Normally you would define a separate job for the webhook triggered verification.
   - >
-    if [ -z "${PACT_URL}" ]; then
-      make ci_main_pipeline
+    if [ -n "${PACT_URL}" ]; then
+      make ci_webhook
     else
-      make ci_verify
+      make ci
     fi

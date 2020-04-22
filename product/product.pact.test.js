@@ -1,3 +1,4 @@
+require('dotenv').config()
 const { Verifier } = require('@pact-foundation/pact');
 const controller = require('./product.controller');
 const Product = require('./product');

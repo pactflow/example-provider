@@ -15,16 +15,33 @@ all: test
 ## CI tasks
 ## ====================
 
-ci_main_pipeline: test $(DEPLOY_TARGET)
+ci: test $(DEPLOY_TARGET)
 
-ci_verify:
+# Run the ci target from a developer machine with the environment variables
+# set as if it was on Travis CI.
+# Use this for quick feedback when playing around with your workflows.
+fake_ci: .env
+	CI=true \
+	TRAVIS_COMMIT=`git rev-parse --short HEAD`+`date +%s` \
+	TRAVIS_BRANCH=`git rev-parse --abbrev-ref HEAD` \
+	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true \
+	make ci
+
+ci_webhook: .env
 	npm run test:pact
+
+fake_ci_webhook:
+	CI=true \
+	TRAVIS_COMMIT=`git rev-parse --short HEAD`+`date +%s` \
+	TRAVIS_BRANCH=`git rev-parse --abbrev-ref HEAD` \
+	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true \
+	make ci_webhook
 
 ## =====================
 ## Build/test tasks
 ## =====================
 
-test:
+test: .env
 	npm run test
 
 ## =====================
@@ -36,8 +53,9 @@ deploy: can_i_deploy deploy_app tag_as_prod
 no_deploy:
 	@echo "Not deploying as not on master branch"
 
-can_i_deploy:
+can_i_deploy: .env
 	@docker run --rm \
+	 --env-file .env \
 	 -e PACT_BROKER_BASE_URL \
 	 -e PACT_BROKER_TOKEN \
 	  pactfoundation/pact-cli:latest \
@@ -51,6 +69,7 @@ deploy_app:
 
 tag_as_prod:
 	@docker run --rm \
+	 --env-file .env \
 	 -e PACT_BROKER_BASE_URL \
 	 -e PACT_BROKER_TOKEN \
 	  pactfoundation/pact-cli:latest \
@@ -108,3 +127,10 @@ travis_login:
 
 travis_encrypt_pact_broker_token:
 	@docker run --rm -v ${HOME}/.travis:/root/.travis -v ${PWD}:${PWD} --workdir ${PWD} lirantal/travis-cli encrypt --pro PACT_BROKER_TOKEN="${PACT_BROKER_TOKEN}"
+
+## ======================
+## Misc
+## ======================
+
+.env:
+	touch .env
