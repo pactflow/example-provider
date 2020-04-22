@@ -38,7 +38,7 @@ Because Travis CI only allows us to have one build configuration per repository,
             * Tag the deployed application version as `prod` in Pactflow so Pactflow knows which version of the provider is in production when the consumer runs `can-i-deploy`.
     * The target `ci_webhook` just runs the pact verification step, and is used when the build is triggered by the webhook.
 
-* In [product/product.pact.test.js](product/product.pact.test.js):
+* In [src/product/product.pact.test.js](src/product/product.pact.test.js):
     * When the `$PACT_URL` is not set (ie. the build is running because the provider changed), the provider is configured to fetch all the pacts for the 'example-provider' provider which belong to the latest consumer versions tagged with `master` and `prod`. This ensures the provider is compatible with the latest changes that the consumer has made, and is also backwards compatible with the production version of the consumer.
     * When the `$PACT_URL` is set (ie. the build is running because it was triggered by the 'contract content changed' webhook), we just verify the pact at the `$PACT_URL`.
     * Pact-JS has a very flexible verification task configuration that allows us to use the same code for both the main pipeline verifications and the webhook-triggered verifications, with dynamically set options. Depending on your pact implementation, you may need to define separate tasks for each of these concerns.
