@@ -15,7 +15,8 @@ describe("Pact Verification", () => {
       logLevel: "INFO",
       providerBaseUrl: "http://localhost:8080",
       providerVersion: process.env.TRAVIS_COMMIT,
-      providerVersionTag: process.env.TRAVIS_BRANCH
+      providerVersionTag: process.env.TRAVIS_BRANCH,
+      verbose: process.env.VERBOSE === 'true'
     }
 
     // For builds triggered by a 'contract content changed' webhook,
@@ -29,6 +30,7 @@ describe("Pact Verification", () => {
     const fetchPactsDynamicallyOpts = {
       provider: "pactflow-example-provider",
       consumerVersionTag: ['master', 'prod'],
+      //consumerVersionSelectors: [{ tag: 'master', latest: true}, { tag: 'prod', latest: true} ],
       pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
       enablePending: false
     }
