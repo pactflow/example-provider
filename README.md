@@ -47,4 +47,3 @@ Because Travis CI only allows us to have one build configuration per repository,
 ## Usage
 
 See the [Pactflow CI/CD Workshop](https://github.com/pactflow/ci-cd-workshop).
-
