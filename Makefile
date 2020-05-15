@@ -1,6 +1,7 @@
 PACTICIPANT := "pactflow-example-provider"
 WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
 TRIGGER_PROVIDER_BUILD_URL := "https://api.travis-ci.com/repo/pactflow%2Fexample-provider/requests"
+PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli:latest"
 
 # Only deploy from master
 ifeq ($(TRAVIS_BRANCH),master)
@@ -15,7 +16,7 @@ all: test
 ## CI tasks
 ## ====================
 
-ci: test $(DEPLOY_TARGET)
+ci: test can_i_deploy $(DEPLOY_TARGET)
 
 # Run the ci target from a developer machine with the environment variables
 # set as if it was on Travis CI.
@@ -48,32 +49,19 @@ test: .env
 ## Deploy tasks
 ## =====================
 
-deploy: can_i_deploy deploy_app tag_as_prod
+deploy: deploy_app tag_as_prod
 
 no_deploy:
 	@echo "Not deploying as not on master branch"
 
 can_i_deploy: .env
-	@docker run --rm \
-	 --env-file .env \
-	 -e PACT_BROKER_BASE_URL \
-	 -e PACT_BROKER_TOKEN \
-	  pactfoundation/pact-cli:latest \
-	  broker can-i-deploy \
-	  --pacticipant ${PACTICIPANT} \
-	  --version ${TRAVIS_COMMIT} \
-	  --to prod
+	@"${PACT_CLI}" broker can-i-deploy --pacticipant ${PACTICIPANT} --version ${TRAVIS_COMMIT} --to prod
 
 deploy_app:
 	@echo "Deploying to prod"
 
 tag_as_prod:
-	@docker run --rm \
-	 --env-file .env \
-	 -e PACT_BROKER_BASE_URL \
-	 -e PACT_BROKER_TOKEN \
-	  pactfoundation/pact-cli:latest \
-	  broker create-version-tag \
+	@"${PACT_CLI}" broker create-version-tag \
 	  --pacticipant ${PACTICIPANT} \
 	  --version ${TRAVIS_COMMIT} \
 	  --tag prod
@@ -94,11 +82,7 @@ create_travis_token_secret:
 # NOTE: the travis token secret must be created (either through the UI or using the
 # `create_travis_token_secret` target) before the webhook is invoked.
 create_or_update_travis_webhook:
-	@docker run --rm \
-	 -e PACT_BROKER_BASE_URL \
-	 -e PACT_BROKER_TOKEN \
-	 -v ${PWD}:${PWD} \
-	  pactfoundation/pact-cli:latest \
+	@"${PACT_CLI}" \
 	  broker create-or-update-webhook \
 	  "${TRIGGER_PROVIDER_BUILD_URL}" \
 	  --header "Content-Type: application/json" "Accept: application/json" "Travis-API-Version: 3" 'Authorization: token $${user.travisToken}' \
@@ -110,13 +94,7 @@ create_or_update_travis_webhook:
 	  --description "Travis CI webhook for ${PACTICIPANT}"
 
 test_travis_webhook:
-	@docker run --rm \
-	 -e PACT_BROKER_BASE_URL \
-	 -e PACT_BROKER_TOKEN \
-	 -v ${PWD}:${PWD} \
-	  pactfoundation/pact-cli:latest \
-	  broker test-webhook \
-	  --uuid ${WEBHOOK_UUID}
+	@"${PACT_CLI}" broker test-webhook --uuid ${WEBHOOK_UUID}
 
 ## ======================
 ## Travis CI set up tasks
