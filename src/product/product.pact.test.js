@@ -16,7 +16,7 @@ describe("Pact Verification", () => {
       logLevel: "INFO",
       providerBaseUrl: "http://localhost:8080",
       providerVersion: process.env.TRAVIS_COMMIT,
-      providerVersionTag: process.env.TRAVIS_BRANCH,
+      providerVersionTags: [process.env.TRAVIS_BRANCH],
       verbose: process.env.VERBOSE === 'true'
     }
 
