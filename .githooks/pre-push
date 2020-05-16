@@ -1,0 +1,6 @@
+#!/bin/sh
+
+slug=$(git config --get remote.origin.url | cut -d ":" -f2 | sed "s/\.git//")
+echo
+echo "View your build at https://travis-ci.com/github/${slug}"
+echo
