@@ -24,3 +24,4 @@ jobs:
           PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
           TRAVIS_COMMIT: ${{ github.sha }}
           TRAVIS_BRANCH: ${{ github.ref }}
+          PACT_URL: ${{ github.event.client_payload.pact_url }}
