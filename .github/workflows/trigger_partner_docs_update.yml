@@ -8,11 +8,11 @@ on:
       - '**.md'
 
 jobs:
-  if: github.repository == 'pactflow/example-provider'
   run:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger update
+        if: github.repository == 'pactflow/example-provider'
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.GHTOKENFORTRIGGERINGPACTDOCSUPDATE }}
