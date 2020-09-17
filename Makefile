@@ -1,4 +1,5 @@
 PACTICIPANT := "pactflow-example-provider"
+GITHUB_REPO := "pactflow/example-provider"
 WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
 TRIGGER_PROVIDER_BUILD_URL := "https://api.travis-ci.com/repo/pactflow%2Fexample-provider/requests"
 PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli:latest"
@@ -95,6 +96,12 @@ create_or_update_travis_webhook:
 
 test_travis_webhook:
 	@"${PACT_CLI}" broker test-webhook --uuid ${WEBHOOK_UUID}
+
+test_pact_changed_build_on_github_actions:
+	@curl -v https://api.github.com/repos/${GITHUB_REPO}/dispatches \
+      -H 'Accept: application/vnd.github.everest-preview+json' \
+      -H "Authorization: Bearer ${GITHUB_ACCESS_TOKEN}" \
+      -d "{\"event_type\": \"pact_changed\", \"client_payload\": { \"pact_url\": \"${PACT_BROKER_BASE_URL}/pacts/provider/pactflow-example-provider/consumer/pactflow-example-consumer/latest\" }}"
 
 ## ======================
 ## Travis CI set up tasks
