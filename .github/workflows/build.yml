@@ -11,11 +11,12 @@ jobs:
         with:
           node-version: '12'
       - run: docker pull pactfoundation/pact-cli:latest
-      - name: install
+      - name: Install
         run: npm i
-      - name: build
+      - name: Build
         run: TRAVIS_BRANCH=${TRAVIS_BRANCH:11} make ci
         env:
+          PACT_BROKER_BASE_URL: https://test.pact.dius.com.au
           PACT_BROKER_TOKEN: ${{ secrets.TEST_PACTFLOW_IO_PACT_BROKER_TOKEN }}
           PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
           TRAVIS_COMMIT: ${{ github.sha }}
