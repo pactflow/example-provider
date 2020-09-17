@@ -1,4 +1,4 @@
-name: Build
+name: Verify changed pact
 
 on:
   repository_dispatch:
