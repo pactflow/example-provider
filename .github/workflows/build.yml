@@ -4,22 +4,38 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  PACT_BROKER_BASE_URL: https://bethtest-3.pact.dius.com.au
+  PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN_FOR_CI_CD_WORKSHOP }}
+  PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
+  TRAVIS_COMMIT: ${{ github.sha }}
+  TRAVIS_BRANCH: ${{ github.ref }}
+
+
 jobs:
-  run:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2-beta
         with:
           node-version: '12'
-      - run: docker pull pactfoundation/pact-cli:latest
       - name: Install
         run: npm i
       - name: Build
-        run: TRAVIS_BRANCH=${TRAVIS_BRANCH:11} make ci
-        env:
-          PACT_BROKER_BASE_URL: https://bethtest-3.pact.dius.com.au
-          PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN_FOR_CI_CD_WORKSHOP }}
-          PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
-          TRAVIS_COMMIT: ${{ github.sha }}
-          TRAVIS_BRANCH: ${{ github.ref }}
+        run: TRAVIS_BRANCH=${TRAVIS_BRANCH:11} make test
+
+  can-i-deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Can I deploy?
+        run: TRAVIS_BRANCH=${TRAVIS_BRANCH:11} make can_i_deploy
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: can-i-deploy
+    steps:
+      - name: Deploy
+        run: TRAVIS_BRANCH=${TRAVIS_BRANCH:11} make deploy
+        if: github.ref == 'refs/heads/master'
