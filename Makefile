@@ -56,13 +56,13 @@ no_deploy:
 	@echo "Not deploying as not on master branch"
 
 can_i_deploy: .env
-	@"${PACT_CLI}" broker can-i-deploy --pacticipant ${PACTICIPANT} --version ${TRAVIS_COMMIT} --to prod
+	"${PACT_CLI}" broker can-i-deploy --pacticipant ${PACTICIPANT} --version ${TRAVIS_COMMIT} --to prod
 
 deploy_app:
 	@echo "Deploying to prod"
 
 tag_as_prod:
-	@"${PACT_CLI}" broker create-version-tag \
+	"${PACT_CLI}" broker create-version-tag \
 	  --pacticipant ${PACTICIPANT} \
 	  --version ${TRAVIS_COMMIT} \
 	  --tag prod
@@ -74,7 +74,7 @@ tag_as_prod:
 # export the TRAVIS_TOKEN environment variable before running this
 # You can get your token from the Settings tab of https://travis-ci.com/account/preferences
 create_travis_token_secret:
-	@curl -v -X POST ${PACT_BROKER_BASE_URL}/secrets \
+	curl -v -X POST ${PACT_BROKER_BASE_URL}/secrets \
 	-H "Authorization: Bearer ${PACT_BROKER_TOKEN}" \
 	-H "Content-Type: application/json" \
 	-H "Accept: application/hal+json" \
@@ -83,7 +83,7 @@ create_travis_token_secret:
 # NOTE: the travis token secret must be created (either through the UI or using the
 # `create_travis_token_secret` target) before the webhook is invoked.
 create_or_update_travis_webhook:
-	@"${PACT_CLI}" \
+	"${PACT_CLI}" \
 	  broker create-or-update-webhook \
 	  "${TRIGGER_PROVIDER_BUILD_URL}" \
 	  --header "Content-Type: application/json" "Accept: application/json" "Travis-API-Version: 3" 'Authorization: token $${user.travisToken}' \
@@ -95,10 +95,10 @@ create_or_update_travis_webhook:
 	  --description "Travis CI webhook for ${PACTICIPANT}"
 
 test_travis_webhook:
-	@"${PACT_CLI}" broker test-webhook --uuid ${WEBHOOK_UUID}
+	"${PACT_CLI}" broker test-webhook --uuid ${WEBHOOK_UUID}
 
 test_pact_changed_build_on_github_actions:
-	@curl -v https://api.github.com/repos/${GITHUB_REPO}/dispatches \
+	curl -v https://api.github.com/repos/${GITHUB_REPO}/dispatches \
       -H 'Accept: application/vnd.github.everest-preview+json' \
       -H "Authorization: Bearer ${GITHUB_ACCESS_TOKEN}" \
       -d "{\"event_type\": \"pact_changed\", \"client_payload\": { \"pact_url\": \"${PACT_BROKER_BASE_URL}/pacts/provider/pactflow-example-provider/consumer/pactflow-example-consumer/latest\" }}"
@@ -108,10 +108,10 @@ test_pact_changed_build_on_github_actions:
 ## ======================
 
 travis_login:
-	@docker run --rm -v ${HOME}/.travis:/root/.travis -it lirantal/travis-cli login --pro
+	docker run --rm -v ${HOME}/.travis:/root/.travis -it lirantal/travis-cli login --pro
 
 travis_encrypt_pact_broker_token:
-	@docker run --rm -v ${HOME}/.travis:/root/.travis -v ${PWD}:${PWD} --workdir ${PWD} lirantal/travis-cli encrypt --pro PACT_BROKER_TOKEN="${PACT_BROKER_TOKEN}"
+	docker run --rm -v ${HOME}/.travis:/root/.travis -v ${PWD}:${PWD} --workdir ${PWD} lirantal/travis-cli encrypt --pro PACT_BROKER_TOKEN="${PACT_BROKER_TOKEN}"
 
 ## ======================
 ## Misc
