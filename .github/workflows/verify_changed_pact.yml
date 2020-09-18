@@ -5,6 +5,14 @@ on:
     types:
       - pact_changed
 
+env:
+  PACT_BROKER_BASE_URL: https://bethtest-3.pact.dius.com.au
+  PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN_FOR_CI_CD_WORKSHOP }}
+  PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
+  TRAVIS_COMMIT: ${{ github.sha }}
+  TRAVIS_BRANCH: ${{ github.ref }}
+  PACT_URL: ${{ github.event.client_payload.pact_url }}
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -18,10 +26,3 @@ jobs:
         run: npm i
       - name: Build
         run: TRAVIS_BRANCH=${TRAVIS_BRANCH:11} make ci_webhook
-        env:
-          PACT_BROKER_BASE_URL: https://bethtest-3.pact.dius.com.au
-          PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN_FOR_CI_CD_WORKSHOP }}
-          PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
-          TRAVIS_COMMIT: ${{ github.sha }}
-          TRAVIS_BRANCH: ${{ github.ref }}
-          PACT_URL: ${{ github.event.client_payload.pact_url }}
