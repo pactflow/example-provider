@@ -7,8 +7,6 @@ env:
   global:
     - PACT_BROKER_BASE_URL=https://test.pactflow.io
     - PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true
-    # Encrypted PACT_BROKER_TOKEN
-    - secure: "yv6R5xIDVW/W5e3NEH6XUAYKF9yKOuIFRvslKxHO0iEDAJCeZE+gxc70aU2FSm/B9zNR1YkYXu3D/y3oUnRhYtNbHJR/1wmU236y9Y7eDRxn8YYxhY4PCn/NGphRau+jUf2K54YMztRsuWx8pAhjMf4n1aMjcqfbYpzexEt1rLDaB/URGvKxVXx5QH7cQmEgmb5jJWJ3y/B09p3jxwI4baJlgbTgn3yiuZ5B6tvsTqPJOG2V3i0p+LQys00LI2hoTgOGV3f3yFaZavmv3kuojx/5kUVEKkKLfJvrkqjgjtAeVSwRHHTVB7RErjsBDlshbROwewmLJuHMqOu5iDwv0zV1iZcyeBBhGBocPvA2ZlvUWOxcs+9DxexTiECmXFAFVkK1KDSsEiomjwehk3R6eR6yd+2uORyvRT60ftZ+dDHJyCn2kE95N39yVdespjJKaC0f/0pq31L6+JfAVSAunigYkKfPZnn59j172FZ0yFFSenicJHFjeg1XKaSGQosUshfRkz1D9IS2CcxnlE09Es/i26sF4vm/I7+EUwElgZLCJ1kPAB4DLbZAynydH/BX/+FAxhteTKH1c5Y1VGpehunwqP04eWM2cjc2SjCg14b1nhMmTjwFRpXcbrJty8jxc6NQH9HwUHi/0p4k5sXGIEMQVvU/sBO9b6GSzyH5cBA="
 before_script:
   - docker pull pactfoundation/pact-cli:latest
 script:
