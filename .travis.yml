@@ -5,7 +5,7 @@ services:
   - docker
 env:
   global:
-    - PACT_BROKER_BASE_URL=https://test.pactflow.io
+    - PACT_BROKER_BASE_URL=https://plishin.pactflow.io
     - PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true
 before_script:
   - docker pull pactfoundation/pact-cli:latest
