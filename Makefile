@@ -2,7 +2,6 @@ PACTICIPANT := "pactflow-example-provider"
 GITHUB_REPO := "pactflow/example-provider"
 PACT_CHANGED_WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
 # PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli:latest"
-PACT_CLI="npx pact-broker"
 
 # Only deploy from master
 ifeq ($(TRAVIS_BRANCH),master)
@@ -56,13 +55,20 @@ no_deploy:
 	@echo "Not deploying as not on master branch"
 
 can_i_deploy: .env
-	"${PACT_CLI}" broker can-i-deploy --pacticipant ${PACTICIPANT} --version ${TRAVIS_COMMIT} --to prod
+	npx pact-broker can-i-deploy \
+	  --broker-base-url ${PACT_BROKER_BASE_URL} \
+	  --broker-token=${PACT_BROKER_TOKEN} \
+	  --pacticipant ${PACTICIPANT} \
+	  --version ${TRAVIS_COMMIT} \
+	  --to prod
 
 deploy_app:
 	@echo "Deploying to prod"
 
-tag_as_prod:
-	"${PACT_CLI}" broker create-version-tag \
+tag_as_prod: .env
+	npx pact-broker create-version-tag \
+	  --broker-base-url ${PACT_BROKER_BASE_URL} \
+	  --broker-token=${PACT_BROKER_TOKEN} \
 	  --pacticipant ${PACTICIPANT} \
 	  --version ${TRAVIS_COMMIT} \
 	  --tag prod
@@ -72,7 +78,7 @@ tag_as_prod:
 ## =====================
 
 # export the GITHUB_TOKEN environment variable before running this
-create_github_token_secret:
+create_github_token_secret: .env
 	curl -v -X POST ${PACT_BROKER_BASE_URL}/secrets \
 	-H "Authorization: Bearer ${PACT_BROKER_TOKEN}" \
 	-H "Content-Type: application/json" \
@@ -81,10 +87,10 @@ create_github_token_secret:
 
 # NOTE: the github token secret must be created (either through the UI or using the
 # `create_travis_token_secret` target) before the webhook is invoked.
-create_or_update_pact_changed_webhook:
-	"${PACT_CLI}" \
-	  broker create-or-update-webhook \
+create_or_update_pact_changed_webhook: .env
+	npx pact-broker create-or-update-webhook \
 	  "https://api.github.com/repos/${GITHUB_REPO}/dispatches" \
+	  --broker-base-url ${PACT_BROKER_BASE_URL} \
 	  --header 'Content-Type: application/json' 'Accept: application/vnd.github.everest-preview+json' 'Authorization: Bearer $${user.githubToken}' \
 	  --request POST \
 	  --data '{ "event_type": "pact_changed", "client_payload": { "pact_url": "$${pactbroker.pactUrl}" } }' \
