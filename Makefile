@@ -1,14 +1,11 @@
+#!make
+include .env
 PACTICIPANT := "pactflow-example-provider"
 GITHUB_REPO := "pactflow/example-provider"
 PACT_CHANGED_WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
-PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli:latest"
+PACT_CLI="docker run --rm --network microservice-contract-testing_default -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN -e PACT_BROKER_BASIC_AUTH_USERNAME -e PACT_BROKER_BASIC_AUTH_PASSWORD pactfoundation/pact-cli:latest"
 
-# Only deploy from master
-ifeq ($(TRAVIS_BRANCH),master)
-	DEPLOY_TARGET=deploy
-else
-	DEPLOY_TARGET=no_deploy
-endif
+TARGET = qa
 
 all: test
 
@@ -16,26 +13,18 @@ all: test
 ## CI tasks
 ## ====================
 
-ci: test can_i_deploy $(DEPLOY_TARGET)
+ci: test can_i_deploy
 
 # Run the ci target from a developer machine with the environment variables
 # set as if it was on Github Actions.
 # Use this for quick feedback when playing around with your workflows.
 fake_ci: .env
-	CI=true \
-	TRAVIS_COMMIT=`git rev-parse --short HEAD`+`date +%s` \
-	TRAVIS_BRANCH=`git rev-parse --abbrev-ref HEAD` \
-	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true \
 	make ci
 
 ci_webhook: .env
 	npm run test:pact
 
 fake_ci_webhook:
-	CI=true \
-	TRAVIS_COMMIT=`git rev-parse --short HEAD`+`date +%s` \
-	TRAVIS_BRANCH=`git rev-parse --abbrev-ref HEAD` \
-	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true \
 	make ci_webhook
 
 ## =====================
@@ -49,22 +38,25 @@ test: .env
 ## Deploy tasks
 ## =====================
 
-deploy: deploy_app tag_as_prod
+deploy_to: 
+	make deploy_app TARGET=${TARGET}
+	make tag_as TARGET=${TARGET}
 
 no_deploy:
 	@echo "Not deploying as not on master branch"
 
 can_i_deploy: .env
-	"${PACT_CLI}" broker can-i-deploy --pacticipant ${PACTICIPANT} --version ${TRAVIS_COMMIT} --to prod
+	"${PACT_CLI}" broker can-i-deploy --pacticipant ${PACTICIPANT} --version ${TRAVIS_COMMIT} --to  ${TARGET} -b ${PACT_BROKER_BASE_URL} -u ${PACT_BROKER_BASIC_AUTH_USERNAME} -p ${PACT_BROKER_BASIC_AUTH_PASSWORD}
 
 deploy_app:
-	@echo "Deploying to prod"
+	@echo "Deploying to ${TARGET}"
 
-tag_as_prod:
+tag_as: .env
 	"${PACT_CLI}" broker create-version-tag \
 	  --pacticipant ${PACTICIPANT} \
 	  --version ${TRAVIS_COMMIT} \
-	  --tag prod
+	  --tag  ${TARGET} \
+	--broker-base-url ${PACT_BROKER_BASE_URL} -u ${PACT_BROKER_BASIC_AUTH_USERNAME} -p ${PACT_BROKER_BASIC_AUTH_PASSWORD}
 
 ## =====================
 ## Pactflow set up tasks
