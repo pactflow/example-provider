@@ -30,11 +30,11 @@ To ensure that a verification is also run whenever a pact changes, we create a w
         * If we are on master:
             * Check if we are safe to deploy to prod using `can-i-deploy` (ie. do we have a succesfully verified pact with the version of the consumer that is currently in production)
             * Deploy (just pretend!)
-            * Tag the deployed application version as `prod` in Pactflow so Pactflow knows which version of the provider is in production when the consumer runs `can-i-deploy`.
+            * Record the deployed application version in Pactflow so Pactflow knows which version of the provider is in production when the consumer runs `can-i-deploy`.
     * The target `ci_webhook` just runs the pact verification step, and is used when the build is triggered by the webhook.
 
 * In [src/product/product.pact.test.js](src/product/product.pact.test.js):
-    * When the `$PACT_URL` is not set (ie. the build is running because the provider changed), the provider is configured to fetch all the pacts for the 'example-provider' provider which belong to the latest consumer versions tagged with `master` and `prod`. This ensures the provider is compatible with the latest changes that the consumer has made, and is also backwards compatible with the production version of the consumer.
+    * When the `$PACT_URL` is not set (ie. the build is running because the provider changed), the provider is configured to fetch all the pacts for the 'example-provider' provider which belong to the latest consumer versions tagged with `master` and those currently deployed to an environment. This ensures the provider is compatible with the latest changes that the consumer has made, and is also backwards compatible with the production/test versions of the consumer.
     * When the `$PACT_URL` is set (ie. the build is running because it was triggered by the 'contract content changed' webhook), we just verify the pact at the `$PACT_URL`.
     * Pact-JS has a very flexible verification task configuration that allows us to use the same code for both the main pipeline verifications and the webhook-triggered verifications, with dynamically set options. Depending on your pact implementation, you may need to define separate tasks for each of these concerns.
     * When the verification results are published, the provider version number is set to the git sha, and the provider version tag is the git branch name. You can read more about versioning [here](https://docs.pact.io/getting_started/versioning_in_the_pact_broker).
