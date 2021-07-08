@@ -15,8 +15,8 @@ describe("Pact Verification", () => {
     const baseOpts = {
       logLevel: "INFO",
       providerBaseUrl: "http://localhost:8080",
-      providerVersion: process.env.TRAVIS_COMMIT,
-      providerVersionTags: process.env.TRAVIS_BRANCH ? [process.env.TRAVIS_BRANCH] : [],
+      providerVersion: process.env.GIT_COMMIT,
+      providerVersionTags: process.env.GIT_BRANCH ? [process.env.GIT_BRANCH] : [],
       verbose: process.env.VERBOSE === 'true'
     }
 

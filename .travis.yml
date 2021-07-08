@@ -16,7 +16,7 @@ script:
   # Normally you would define a separate job for the webhook triggered verification.
   - >
     if [ -n "${PACT_URL}" ]; then
-      make ci_webhook
+      GIT_COMMIT=${TRAVIS_COMMIT} GIT_BRANCH=${TRAVIS_BRANCH} make ci_webhook
     else
-      make ci
+      GIT_COMMIT=${TRAVIS_COMMIT} GIT_BRANCH=${TRAVIS_BRANCH} make ci
     fi
