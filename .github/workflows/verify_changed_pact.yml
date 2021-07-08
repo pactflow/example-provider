@@ -14,7 +14,7 @@ env:
   PACT_URL: ${{ github.event.client_payload.pact_url }}
 
 jobs:
-  verify-pact:
+  verify-changed-pact:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
