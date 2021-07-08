@@ -1,10 +1,6 @@
 # Example Provider
 
-[![Build Status](https://travis-ci.com/pactflow/example-provider.svg?branch=master)](https://travis-ci.com/pactflow/example-provider)
-
 This is an example of a Node provider that uses Pact, [Pactflow](https://pactflow.io) and Github Actions to ensure that it is compatible with the expectations its consumers have of it.
-
-It is using a public tenant on Pactflow, which you can access [here](https://test.pact.dius.com.au) using the credentials `dXfltyFMgNOFZAxr8io9wJ37iUpY42M`/`O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1`. The latest version of the Example Consumer/Example Provider pact is published [here](https://test.pact.dius.com.au/pacts/provider/pactflow-example-provider/consumer/pactflow-example-consumer/latest).
 
 ## Pact verifications
 
@@ -23,7 +19,7 @@ To ensure that a verification is also run whenever a pact changes, we create a w
     * Our PACT_BROKER_TOKEN environment variable is set from a Github Secret. This is a read/write token. For normal development use, you would use a read only token, as you would not be publishing verification results from your local machine.
 
 * In the [Makefile](Makefile):
-    * The target `create_or_update_travis_webhook` creates the Pactflow webhook that will trigger a build of the provider when any of its consumers publishes a pact with changed content.
+    * The target `create_or_update_pact_changed_webhook` creates the Pactflow webhook that will trigger a build of the provider when any of its consumers publishes a pact with changed content.
     * To call the Github API that triggers the build, the webhook uses a bearer token that is stored in a Pactflow secret called `${user.githubToken}`. The secret can be created using the `create_github_token_secret` target, or through the Pactflow UI.
     * The target `ci` runs when the provider has pushed a new commit. It performs the following tasks:
         * Run the isolated tests (including the pact verification tests, which publish the verification results)
