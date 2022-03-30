@@ -9,7 +9,7 @@ on:
 
 jobs:
   run:
-    if: ${{ github.repository == "pactflow/example-provider" }}
+    if: ${{ github.repository == 'pactflow/example-provider' }}
     runs-on: ubuntu-latest
     steps:
       - name: Trigger update
