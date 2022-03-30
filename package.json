@@ -10,15 +10,15 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "request": "^2.88.2"
   },
   "devDependencies": {
-    "@pact-foundation/pact": "^9.11.1",
-    "@pact-foundation/pact-node": "^10.10.1",
+    "@pact-foundation/pact": "^9.17.3",
+    "@pact-foundation/pact-node": "^10.17.2",
     "dotenv": "^8.2.0",
-    "eslint": "^6.8.0",
-    "jest": "^25.5.4"
+    "eslint": "^8.12.0",
+    "jest": "^27.5.1"
   },
   "license": "ISC"
 }
