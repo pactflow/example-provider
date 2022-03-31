@@ -1,6 +1,6 @@
 # Example Provider
 
-[![Build Status](https://github.com/pactflow/example-provider/actions/workflows/build.yml/badge.svg)](https://github.com/pactflow/example-provider/actions)
+[![Build Status](https://github.com/pactflow/example-provider/actions/workflows/build.yml/badge.svg)](https://github.com/pactflow/example-provider/actions) 
 
 [![Can I deploy Status](https://testdemo.pactflow.io/pacticipants/pactflow-example-provider/branches/master/latest-version/can-i-deploy/to-environment/production/badge)](https://testdemo.pactflow.io/pacticipants/pactflow-example-provider/branches/master/latest-version/can-i-deploy/to-environment/production/badge)
 
