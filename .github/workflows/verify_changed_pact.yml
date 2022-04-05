@@ -6,7 +6,7 @@ on:
       - pact_changed
 
 env:
-  PACT_BROKER_BASE_URL: https://testdemo.pactflow.io
+  PACT_BROKER_BASE_URL: https://test.pactflow.io
   PACT_BROKER_TOKEN: ${{ secrets.PACTFLOW_TOKEN_FOR_CI_CD_WORKSHOP }}
   PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
   GIT_COMMIT: ${{ github.sha }}
