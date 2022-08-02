@@ -13,7 +13,7 @@ const server = app.listen("8080");
 describe("Pact Verification", () => {
   it("validates the expectations of ProductService", () => {
     const baseOpts = {
-      logLevel: "INFO",
+      logLevel: "TRACE",
       providerBaseUrl: "http://localhost:8080",
       providerVersion: process.env.GIT_COMMIT,
       providerVersionTags: process.env.GIT_BRANCH ? [process.env.GIT_BRANCH] : [],
