@@ -1,5 +1,7 @@
 name: Verify changed pact
 
+# This workflow leverages the https://docs.pact.io/pact_broker/webhooks#the-contract-content-changed-event webhook
+
 on:
   repository_dispatch:
     types:
@@ -20,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '12'
+          node-version: "12"
       - run: docker pull pactfoundation/pact-cli:latest
       - name: Install
         run: npm i

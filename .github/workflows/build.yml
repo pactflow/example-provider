@@ -1,5 +1,7 @@
 name: Build
 
+#  This workflow is the Provider's CI build that will run on every commit for the provider codebase
+
 on:
   push:
   workflow_dispatch:
@@ -18,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2-beta
         with:
-          node-version: '12'
+          node-version: "12"
       - name: Install
         run: npm i
       - name: Test
