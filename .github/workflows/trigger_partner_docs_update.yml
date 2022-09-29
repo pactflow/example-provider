@@ -9,12 +9,22 @@ on:
 
 jobs:
   run:
-    if: ${{ github.repository == "pactflow/example-provider" }}
+    if: ${{ github.repository == 'pactflow/example-provider' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger update
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.GHTOKENFORTRIGGERINGPACTDOCSUPDATE }}
-          repository: pactflow/partners.pactflow.io
-          event-type: pactflow-example-provider-js-updated
+      - name: Trigger docs.pactflow.io update workflow
+        run: |
+          curl -X POST https://api.github.com/repos/pactflow/docs.pactflow.io/dispatches \
+                -H 'Accept: application/vnd.github.everest-preview+json' \
+                -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -d '{"event_type": "pactflow-example-provider-js-updated"}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHTOKENFORTRIGGERINGPACTDOCSUPDATE }}
+      - name: Trigger partners.pact.io update workflow
+        run: |
+          curl -X POST https://api.github.com/repos/pactflow/partners.pactflow.io/dispatches \
+                -H 'Accept: application/vnd.github.everest-preview+json' \
+                -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -d '{"event_type": "pactflow-example-provider-js-updated"}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GHTOKENFORTRIGGERINGPACTDOCSUPDATE }}

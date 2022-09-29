@@ -17,6 +17,7 @@ describe("Pact Verification", () => {
       providerBaseUrl: "http://localhost:8080",
       providerVersion: process.env.GIT_COMMIT,
       providerVersionTags: process.env.GIT_BRANCH ? [process.env.GIT_BRANCH] : [],
+      providerVersionBranch: process.env.GIT_BRANCH ? process.env.GIT_BRANCH : "",
       verbose: process.env.VERBOSE === 'true'
     }
 
@@ -27,16 +28,22 @@ describe("Pact Verification", () => {
       pactUrls: [process.env.PACT_URL]
     }
 
-    // For 'normal' provider builds, fetch `master` and `prod` pacts for this provider
+   // For 'normal' provider builds, fetch the the latest version from the main branch of each consumer, as specified by
+    // the consumer's mainBranch property and all the currently deployed and currently released and supported versions of each consumer.
+    // https://docs.pact.io/pact_broker/advanced_topics/consumer_version_selectors
     const fetchPactsDynamicallyOpts = {
       provider: "pactflow-example-provider",
       //consumerVersionTag: ['master', 'prod'], //the old way of specifying which pacts to verify
-      consumerVersionSelectors: [{ tag: 'master', latest: true }, { deployed: true } ], // the new way of specifying which pacts to verify
+      // consumerVersionSelectors: [{ tag: 'master', latest: true }, { deployed: true } ], // the new way of specifying which pacts to verify if using tags
+      consumerVersionSelectors: [
+        { mainBranch: true },
+        { deployedOrReleased: true },
+      ], // the new way of specifying which pacts to verify if using branches (recommended)
       pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
       enablePending: false,
-      includeWipPactsSince: undefined
-    }
-
+      includeWipPactsSince: undefined,
+    };
+    
     const stateHandlers = {
       "products exists": () => {
         controller.repository.products = new Map([

@@ -1,6 +1,14 @@
 # Example Provider
 
+[![Build Status](https://github.com/pactflow/example-provider/actions/workflows/build.yml/badge.svg)](https://github.com/pactflow/example-provider/actions) 
+
+[![Can I deploy Status](https://test.pactflow.io/pacticipants/pactflow-example-provider/branches/master/latest-version/can-i-deploy/to-environment/production/badge)](https://test.pactflow.io/pacticipants/pactflow-example-provider/branches/master/latest-version/can-i-deploy/to-environment/production/badge)
+
+[![pactflow-example-provider/pactflow-example-consumer](https://test.pactflow.io/pacts/provider/pactflow-example-provider/consumer/pactflow-example-consumer/latest/master/badge.svg)](https://test.pactflow.io/pacts/provider/pactflow-example-provider/consumer/pactflow-example-consumer/latest/master)
+
 This is an example of a Node provider that uses Pact, [Pactflow](https://pactflow.io) and Github Actions to ensure that it is compatible with the expectations its consumers have of it.
+
+It is using a public tenant on Pactflow, which you can access [here](https://test.pactflow.io/) using the credentials `dXfltyFMgNOFZAxr8io9wJ37iUpY42M`/`O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1`. The latest version of the Example Pactflow Consumer/Example Pactflow Provider pact is published [here](https://test.pactflow.io/overview/provider/pactflow-example-provider/consumer/pactflow-example-consumer).
 
 ## Pact verifications
 
