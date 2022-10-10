@@ -4,6 +4,9 @@ PACT_CHANGED_WEBHOOK_UUID := "c76b601e-d66a-4eb1-88a4-6ebc50c0df8b"
 CONTRACT_REQUIRING_VERIFICATION_PUBLISHED_WEBHOOK_UUID := "8ce63439-6b70-4e9b-8891-703d5ea2953c"
 PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli"
 
+GIT_COMMIT:=`git rev-parse HEAD`
+GIT_BRANCH:=`git rev-parse --abbrev-ref HEAD`
+
 # Only deploy from master
 ifeq ($(GIT_BRANCH),master)
 	DEPLOY_TARGET=deploy
@@ -24,8 +27,6 @@ ci: test can_i_deploy $(DEPLOY_TARGET)
 # Use this for quick feedback when playing around with your workflows.
 fake_ci: .env
 	CI=true \
-	GIT_COMMIT=`git rev-parse --short HEAD`+`date +%s` \
-	GIT_BRANCH=`git rev-parse --abbrev-ref HEAD` \
 	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true \
 	make ci
 
