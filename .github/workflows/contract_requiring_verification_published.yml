@@ -20,12 +20,12 @@ jobs:
   verify-contract-requiring-verification:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{env.GIT_COMMIT}}
-      - uses: actions/setup-node@v2-beta
+      - uses: actions/setup-node@v3
         with:
-          node-version: "12"
+          node-version: '16'
       - run: docker pull pactfoundation/pact-cli:latest
       - name: Install
         run: npm i
