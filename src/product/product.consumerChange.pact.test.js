@@ -12,10 +12,16 @@ describe('Pact Verification', () => {
   beforeAll(() => {
     server = setupServer();
   });
+  afterAll(() => {
+    if (server) {
+      server.close();
+    }
+  });
   it('validates the expectations of a contract required verification that has been published for this provider', () => {
     // For builds trigged by a 'contract_requiring_verification_published' webhook, verify the changed pact against latest of mainBranch and any version currently deployed to an environment
     // https://docs.pact.io/pact_broker/webhooks#using-webhooks-with-the-contract_requiring_verification_published-event
     // The URL will bave been passed in from the webhook to the CI job.
+
     const pactChangedOpts = {
       pactUrls: [process.env.PACT_URL]
     };
@@ -32,13 +38,8 @@ describe('Pact Verification', () => {
       requestFilter: requestFilter
     };
 
-    return new Verifier(opts)
-      .verifyProvider()
-      .then(() => {
-        console.log('Pact Verification Complete!');
-      })
-      .finally(() => {
-        server.close();
-      });
+    return new Verifier(opts).verifyProvider().then(() => {
+      console.log('Pact Verification Complete!');
+    });
   });
 });

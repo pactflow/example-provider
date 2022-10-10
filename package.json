@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node server.js",
-    "test": "npx jest --testTimeout 30000",
-    "test:pact": "npx jest --testTimeout 30000 --testMatch \"**/*.pact.test.js\""
+    "test": "jest --testTimeout 30000 --testPathIgnorePatterns consumerChange.pact.test.js",
+    "test:pact": "jest --testTimeout 30000 --testMatch \"**/*.consumerChange.pact.test.js\""
   },
   "dependencies": {
     "cors": "^2.8.5",

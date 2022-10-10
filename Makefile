@@ -5,14 +5,21 @@ CONTRACT_REQUIRING_VERIFICATION_PUBLISHED_WEBHOOK_UUID := "8ce63439-6b70-4e9b-88
 PACT_CLI="docker run --rm -v ${PWD}:${PWD} -e PACT_BROKER_BASE_URL -e PACT_BROKER_TOKEN pactfoundation/pact-cli"
 
 .EXPORT_ALL_VARIABLES:
-GIT_COMMIT=$(shell git rev-parse HEAD)
-GIT_BRANCH=$(shell git rev-parse --abbrev-ref HEAD)
+GIT_COMMIT?=$(shell git rev-parse HEAD)
+GIT_BRANCH?=$(shell git rev-parse --abbrev-ref HEAD)
+ENVIRONMENT?=production
 
-# Only deploy from master
+# Only deploy from master (to production env) or test (to test env)
 ifeq ($(GIT_BRANCH),master)
+	ENVIRONMENT=production
 	DEPLOY_TARGET=deploy
 else
-	DEPLOY_TARGET=no_deploy
+	ifeq ($(GIT_BRANCH),test)
+		ENVIRONMENT=test
+		DEPLOY_TARGET=deploy
+	else
+		DEPLOY_TARGET=no_deploy
+	endif
 endif
 
 all: test
@@ -56,13 +63,13 @@ no_deploy:
 	@echo "Not deploying as not on master branch"
 
 can_i_deploy: .env
-	"${PACT_CLI}" broker can-i-deploy --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --to-environment production
+	"${PACT_CLI}" broker can-i-deploy --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --to-environment ${ENVIRONMENT}
 
 deploy_app:
-	@echo "Deploying to production"
+	@echo "Deploying to ${ENVIRONMENT}"
 
 record_deployment: .env
-	@"${PACT_CLI}" broker record_deployment --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --environment production
+	@"${PACT_CLI}" broker record_deployment --pacticipant ${PACTICIPANT} --version ${GIT_COMMIT} --environment ${ENVIRONMENT}
 
 ## =====================
 ## Pactflow set up tasks

@@ -12,12 +12,16 @@ describe('Pact Verification', () => {
   beforeAll(() => {
     server = setupServer();
   });
+  afterAll(() => {
+    if (server) {
+      server.close();
+    }
+  });
   it('validates the expectations of any consumers, by specified consumerVersionSelectors', () => {
     if (process.env.PACT_URL) {
       console.log('pact url specified, so this test should not run');
       return;
     }
-
     // For 'normal' provider builds, fetch the the latest version from the main branch of each consumer, as specified by
     // the consumer's mainBranch property and all the currently deployed and currently released and supported versions of each consumer.
     // https://docs.pact.io/pact_broker/advanced_topics/consumer_version_selectors
@@ -41,13 +45,8 @@ describe('Pact Verification', () => {
       stateHandlers: stateHandlers,
       requestFilter: requestFilter
     };
-    return new Verifier(opts)
-      .verifyProvider()
-      .then((output) => {
-        console.log('Pact Verification Complete!');
-      })
-      .finally(() => {
-        server.close();
-      });
+    return new Verifier(opts).verifyProvider().then((output) => {
+      console.log('Pact Verification Complete!');
+    });
   });
 });
