@@ -1,20 +1,20 @@
-require("dotenv").config();
-const { Verifier } = require("@pact-foundation/pact");
+require('dotenv').config();
+const { Verifier } = require('@pact-foundation/pact');
 const {
   baseOpts,
   setupServer,
   stateHandlers,
-  requestFilter,
-} = require("./pact.setup");
+  requestFilter
+} = require('./pact.setup');
 
-describe("Pact Verification", () => {
+describe('Pact Verification', () => {
   let server;
   beforeAll(() => {
     server = setupServer();
   });
-  it("validates the expectations of any consumers, by specified consumerVersionSelectors", () => {
+  it('validates the expectations of any consumers, by specified consumerVersionSelectors', () => {
     if (process.env.PACT_URL) {
-      console.log("pact url specified, so this test should not run");
+      console.log('pact url specified, so this test should not run');
       return;
     }
 
@@ -22,32 +22,29 @@ describe("Pact Verification", () => {
     // the consumer's mainBranch property and all the currently deployed and currently released and supported versions of each consumer.
     // https://docs.pact.io/pact_broker/advanced_topics/consumer_version_selectors
     const fetchPactsDynamicallyOpts = {
-      provider: "pactflow-example-provider",
+      provider: 'pactflow-example-provider',
       consumerVersionSelectors: [
-        // { matchingBranch: true },
         { mainBranch: true },
         { deployed: true },
+        { matchingBranch: true }
       ],
       pactBrokerUrl: process.env.PACT_BROKER_BASE_URL,
       // https://docs.pact.io/pact_broker/advanced_topics/pending_pacts
       enablePending: true,
       // https://docs.pact.io/pact_broker/advanced_topics/wip_pacts
-      includeWipPactsSince: "2020-01-01",
+      includeWipPactsSince: '2020-01-01'
     };
 
     const opts = {
       ...baseOpts,
       ...fetchPactsDynamicallyOpts,
       stateHandlers: stateHandlers,
-      requestFilter: requestFilter,
+      requestFilter: requestFilter
     };
-    console.log(opts);
-
     return new Verifier(opts)
       .verifyProvider()
       .then((output) => {
-        console.log("Pact Verification Complete!");
-        console.log(output);
+        console.log('Pact Verification Complete!');
       })
       .finally(() => {
         server.close();
