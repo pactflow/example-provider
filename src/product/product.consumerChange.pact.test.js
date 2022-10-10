@@ -10,7 +10,7 @@ const {
 describe('Pact Verification', () => {
   let server;
   beforeAll(() => {
-    server = setupServer;
+    server = setupServer();
   });
   it('validates the expectations of a contract required verification that has been published for this provider', () => {
     // For builds trigged by a 'contract_requiring_verification_published' webhook, verify the changed pact against latest of mainBranch and any version currently deployed to an environment
