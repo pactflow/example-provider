@@ -8,7 +8,7 @@ servers:
 paths:
   /products:
     get:
-      summary: List all products 
+      summary: List all products
       description: Returns all products
       operationId: getAllProducts
       responses:
