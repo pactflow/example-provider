@@ -29,7 +29,7 @@ env:
 jobs:
   pact-publish-oas-action:
     # Remove the following condition to run this on your own fork
-    if: github.owner == 'pactflow' 
+    if: ${{ github.repository_owner == 'pactflow' }}
     # This workflow is disabled by default to allow users to run the Consumer-Driven Contract
     # testing workshop without distraction. By removing the condition, this workflow will 
     # upload an OpenAPI Design candidate showcasing Bi-Directional Contract testing
