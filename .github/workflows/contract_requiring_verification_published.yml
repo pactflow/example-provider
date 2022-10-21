@@ -6,6 +6,12 @@ on:
   repository_dispatch:
     types:
       - contract_requiring_verification_published
+  workflow_dispatch:
+    # inputs aren't available on push, so we set them explicitly in separate steps
+    inputs:
+      PACT_URL:
+        description: URL of pact to verify
+        required: true
 
 env:
   PACT_BROKER_BASE_URL: https://test.pactflow.io
@@ -20,12 +26,17 @@ jobs:
   verify-contract-requiring-verification:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout default branch if user manually provides pact URL
+        uses: actions/checkout@v3
+        if: ${{ github.event.inputs.PACT_URL }}
+      - name: checkout specific SHA if webhook providers pact URL
+        uses: actions/checkout@v3
+        if: ${{ github.event.client_payload.pact_url }}
         with:
           ref: ${{env.GIT_COMMIT}}
-      - uses: actions/setup-node@v2-beta
+      - uses: actions/setup-node@v3
         with:
-          node-version: "12"
+          node-version: '16'
       - run: docker pull pactfoundation/pact-cli:latest
       - name: Install
         run: npm i
