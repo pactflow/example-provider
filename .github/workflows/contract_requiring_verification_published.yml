@@ -1,11 +1,11 @@
-name: contract_requiring_verification_published2
+name: contract_requiring_verification_published
 
 # This workflow leverages the https://docs.pact.io/pact_broker/webhooks#the-contract-requiring-verification-published-event webhook
 
 on:
   repository_dispatch:
     types:
-      - contract_requiring_verification_published
+      - contract_requiring_verification_published2
   workflow_dispatch:
     # inputs aren't available on push, so we set them explicitly in separate steps
     inputs:
