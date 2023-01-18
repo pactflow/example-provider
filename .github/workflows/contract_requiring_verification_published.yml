@@ -1,4 +1,4 @@
-name: contract_requiring_verification_published
+name: contract_requiring_verification_published2
 
 # This workflow leverages the https://docs.pact.io/pact_broker/webhooks#the-contract-requiring-verification-published-event webhook
 
