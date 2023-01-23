@@ -6,9 +6,9 @@
 
 [![pactflow-example-provider/pactflow-example-consumer](https://test.pactflow.io/pacts/provider/pactflow-example-provider/consumer/pactflow-example-consumer/latest/master/badge.svg)](https://test.pactflow.io/pacts/provider/pactflow-example-provider/consumer/pactflow-example-consumer/latest/master)
 
-This is an example of a Node provider that uses Pact, [Pactflow](https://pactflow.io) and Github Actions to ensure that it is compatible with the expectations its consumers have of it.
+This is an example of a Node provider that uses Pact, [PactFlow](https://pactflow.io) and Github Actions to ensure that it is compatible with the expectations its consumers have of it.
 
-It is using a public tenant on Pactflow, which you can access [here](https://test.pactflow.io/) using the credentials `dXfltyFMgNOFZAxr8io9wJ37iUpY42M`/`O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1`. The latest version of the Example Pactflow Consumer/Example Pactflow Provider pact is published [here](https://test.pactflow.io/overview/provider/pactflow-example-provider/consumer/pactflow-example-consumer).
+It is using a public tenant on PactFlow, which you can access [here](https://test.pactflow.io/) using the credentials `dXfltyFMgNOFZAxr8io9wJ37iUpY42M`/`O5AIZWxelWbLvqMd8PkAVycBJh2Psyg1`. The latest version of the Example PactFlow Consumer/Example PactFlow Provider pact is published [here](https://test.pactflow.io/overview/provider/pactflow-example-provider/consumer/pactflow-example-consumer).
 
 ## Pact verifications
 
@@ -17,9 +17,9 @@ When using Pact in a CI/CD pipeline, there are two reasons for a pact verificati
 * When the provider changes (to make sure it does not break any existing consumer expectations)
 * When a pact changes (to see if the provider is compatible with the new expectations)
 
-When the provider changes, the pact verification task runs as part the provider's normal build pipeline, generally after the unit tests, and before any deployment takes place. This pact verification task is configured to dynamically fetch all the relevant pacts for the specified provider from Pactflow, verify them, and publish the results back to Pactflow.
+When the provider changes, the pact verification task runs as part the provider's normal build pipeline, generally after the unit tests, and before any deployment takes place. This pact verification task is configured to dynamically fetch all the relevant pacts for the specified provider from PactFlow, verify them, and publish the results back to PactFlow.
 
-To ensure that a verification is also run whenever a pact changes, we create a webhook in Pactflow that triggers a provider build, and passes in the URL of the changed pact, to verify it against the head and deployed/released versions of the provider. Ideally, this would be a completely separate build from your normal provider pipeline, and it should just verify the changed pact.
+To ensure that a verification is also run whenever a pact changes, we create a webhook in PactFlow that triggers a provider build, and passes in the URL of the changed pact, to verify it against the head and deployed/released versions of the provider. Ideally, this would be a completely separate build from your normal provider pipeline, and it should just verify the changed pact.
 
 ## Features
 
@@ -31,17 +31,17 @@ To ensure that a verification is also run whenever a pact changes, we create a w
 
 * In the [Makefile](Makefile):
   * Using the [contract requiring verification published](https://docs.pact.io/pact_broker/webhooks#the-contract-requiring-verification-published-event) event
-    * The target `create_or_update_contract_requiring_verification_published_webhook` creates the Pactflow webhook that will trigger a build of the provider when any of its consumers publishes a pact with changed content.
-    * To call the Github API that triggers the build, the webhook uses a bearer token that is stored in a Pactflow secret called `${user.githubToken}`. The secret can be created using the `create_github_token_secret` target, or through the Pactflow UI.
+    * The target `create_or_update_contract_requiring_verification_published_webhook` creates the PactFlow webhook that will trigger a build of the provider when any of its consumers publishes a pact with changed content.
+    * To call the Github API that triggers the build, the webhook uses a bearer token that is stored in a PactFlow secret called `${user.githubToken}`. The secret can be created using the `create_github_token_secret` target, or through the PactFlow UI.
     * The target `ci` runs when the provider has pushed a new commit. It performs the following tasks:
       * Run the isolated tests (including the pact verification tests, which publish the verification results)
       * If we are on master:
         * Check if we are safe to deploy to prod using `can-i-deploy` (ie. do we have a succesfully verified pact with the version of the consumer that is currently in production)
         * Deploy (just pretend!)
-        * Record the deployed application version in Pactflow so Pactflow knows which version of the provider is in production when the consumer runs `can-i-deploy`.
+        * Record the deployed application version in PactFlow so PactFlow knows which version of the provider is in production when the consumer runs `can-i-deploy`.
     * The target `ci_webhook` just runs the pact verification step, and is used when the build is triggered by the webhook.
-    * The target `create_or_update_contract_requiring_verification_published_webhook` creates the Pactflow webhook that will trigger a build of the provider when any of its consumers publishes a pact with changed content.
-    * To call the Github API that triggers the build, the webhook uses a bearer token that is stored in a Pactflow secret called `${user.githubToken}`. The secret can be created using the `create_github_token_secret` target, or through the Pactflow UI.
+    * The target `create_or_update_contract_requiring_verification_published_webhook` creates the PactFlow webhook that will trigger a build of the provider when any of its consumers publishes a pact with changed content.
+    * To call the Github API that triggers the build, the webhook uses a bearer token that is stored in a PactFlow secret called `${user.githubToken}`. The secret can be created using the `create_github_token_secret` target, or through the PactFlow UI.
 
 * In [src/product/product.providerChange.pact.test.js](src/product/product.providerChange.pact.test.js):
   * When the `$PACT_URL` is not set (ie. the build is running because the provider changed), the provider is configured to fetch all the pacts for the 'example-provider' provider which belong to the latest consumer versions associated with their main branch and those currently deployed to an environment. This ensures the provider is compatible with the latest changes that the consumer has made, and is also backwards compatible with the production/test versions of the consumer.
@@ -51,4 +51,4 @@ To ensure that a verification is also run whenever a pact changes, we create a w
 
 ## Usage
 
-See the [Pactflow CI/CD Workshop](https://github.com/pactflow/ci-cd-workshop).
+See the [PactFlow CI/CD Workshop](https://github.com/pactflow/ci-cd-workshop).
