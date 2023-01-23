@@ -3,9 +3,9 @@ name: Provider Design Feedback
 # Create/Edit OpenAPI Document in SwaggerHub or store OpenAPI document locally in env.oas_file_location below
 # Sync OpenAPI -> SCM with Github Sync - https://support.smartbear.com/swaggerhub/docs/integrations/github-sync.html
 # Version number = <OAS Version>-<GitHub Commit SHA>-design
-# OpenAPI + Provider Test Report = Provider Contract Uploaded to Pactflow
+# OpenAPI + Provider Test Report = Provider Contract Uploaded to PactFlow
 # *** Test Report is just OAS file, as the design will not be tested against an API mock or real implementation at this stage ***
-# Pactflow compares OpenAPI against any registered consumers
+# PactFlow compares OpenAPI against any registered consumers
 # Visiblity into affected consumers visible via can-i-deploy
 
 on:
@@ -42,7 +42,7 @@ jobs:
           sudo snap install yq 
           UNIQUE_VERSION=$(yq '.info.version' ${{ env.oas_file_location }})-${{ github.sha }}-design
           echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
-      - name: publishing ${{ env.application_name }} with ${{ env.version }} to Pactflow
+      - name: publishing ${{ env.application_name }} with ${{ env.version }} to PactFlow
         uses: pactflow/actions/publish-provider-contract@v1.0.1
         env:
           oas_file: ${{ env.oas_file_location }}

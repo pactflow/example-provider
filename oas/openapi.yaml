@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Product API
-  description: Pactflow Product API demo
+  description: PactFlow Product API demo
   version: 1.0.0
 servers:
 - url: /
