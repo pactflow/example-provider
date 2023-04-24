@@ -1,0 +1,39 @@
+name: contract_requiring_verification_published
+
+# This workflow leverages the https://docs.pact.io/pact_broker/webhooks#the-contract-requiring-verification-published-event webhook
+
+on:
+  repository_dispatch:
+    types: [contract_requiring_verification_published]
+  workflow_dispatch:
+
+env:
+  PACT_BROKER_BASE_URL: http://35.175.20.146
+  PACT_BROKER_PUBLISH_VERIFICATION_RESULTS: true
+  GIT_BRANCH: ${{ github.event.client_payload.branch }}
+  GIT_COMMIT: ${{ github.event.client_payload.commit_sha }}
+  CONSUMER_NAME: ${{ github.event.client_payload.consumer }}
+
+jobs:
+  verify-contract-requiring-verification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout default branch if user manually provides pact URL
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.ref }
+
+      - name: checkout specific SHA if webhook providers pact URL
+        uses: actions/checkout@v3
+        if: ${{ github.event.client_payload.commit_sha }}
+        with:
+          ref: ${{env.GIT_COMMIT}}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: docker pull pactfoundation/pact-cli:latest
+      - name: Install
+        run: npm i
+      - name: Make CI webhook
+        run: make ci_webhook
