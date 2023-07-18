@@ -7,6 +7,7 @@ class ProductRepository {
             ["09", new Product("09", "CREDIT_CARD", "Gem Visa", "v1")],
             ["10", new Product("10", "CREDIT_CARD", "28 Degrees", "v1")],
             ["11", new Product("11", "PERSONAL_LOAN", "MyFlexiPay", "v2")],
+            ["12", new Product("12", "PERSONAL_LOAN", "Monzo", "v2")],
         ]);
     }
 
