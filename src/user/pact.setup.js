@@ -1,6 +1,5 @@
-const controller = require("./product.controller");
-const Product = require("./product");
-
+const controller = require("./user.controller");
+const User = require("./user");
 const { setupServer } = require('../../setup');
 
 const baseOpts = {
@@ -11,25 +10,16 @@ const baseOpts = {
   verbose: process.env.VERBOSE === "true",
 };
 
+// Setup provider server to verify
 
 const stateHandlers = {
-  "products exists": () => {
-    controller.repository.products = new Map([
-      ["10", new Product("10", "CREDIT_CARD", "28 Degrees", "v1")],
-    ]);
+  "a user with ID 0 does not exist": () => {
+    controller.repository.users = new Map();
   },
-  "products exist": () => {
-    controller.repository.products = new Map([
-      ["10", new Product("10", "CREDIT_CARD", "28 Degrees", "v1")],
+  "a user with ID 1 does not exist": () => {
+    controller.repository.users = new Map([
+      ["1", new User("1", "user", "user@mxmv.uk", "hunter2")],
     ]);
-  },
-  "a product with ID 10 exists": () => {
-    controller.repository.products = new Map([
-      ["10", new Product("10", "CREDIT_CARD", "28 Degrees", "v1")],
-    ]);
-  },
-  "a product with ID 11 does not exist": () => {
-    controller.repository.products = new Map();
   },
 };
 
