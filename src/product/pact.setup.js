@@ -1,8 +1,6 @@
 const controller = require("./product.controller");
 const Product = require("./product");
 
-const { setupServer } = require('../../setup');
-
 const baseOpts = {
   logLevel: "INFO",
   providerBaseUrl: "http://localhost:8080",
@@ -44,7 +42,6 @@ const requestFilter = (req, res, next) => {
 
 module.exports = {
   baseOpts,
-  setupServer,
   stateHandlers,
   requestFilter,
 };

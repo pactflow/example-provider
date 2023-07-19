@@ -1,6 +1,5 @@
 const controller = require("./user.controller");
 const User = require("./user");
-const { setupServer } = require('../../setup');
 
 const baseOpts = {
   logLevel: "INFO",
@@ -34,7 +33,6 @@ const requestFilter = (req, res, next) => {
 
 module.exports = {
   baseOpts,
-  setupServer,
   stateHandlers,
   requestFilter,
 };
