@@ -9,16 +9,6 @@ const baseOpts = {
   verbose: process.env.VERBOSE === "true",
 };
 
-// Setup provider server to verify
-
-const setupServer = () => {
-  const app = require("express")();
-  const authMiddleware = require("../middleware/auth.middleware");
-  app.use(authMiddleware);
-  app.use(require("./product.routes"));
-  const server = app.listen("8080");
-  return server;
-};
 
 const stateHandlers = {
   "products exists": () => {
@@ -52,7 +42,6 @@ const requestFilter = (req, res, next) => {
 
 module.exports = {
   baseOpts,
-  setupServer,
   stateHandlers,
   requestFilter,
 };

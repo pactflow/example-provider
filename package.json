@@ -19,5 +19,9 @@
     "eslint": "^8.25.0",
     "jest": "^29.1.2"
   },
+  "jest": {
+    "globalSetup": "./setup.js",
+    "globalTeardown": "./teardown.js"
+  },
   "license": "ISC"
 }
