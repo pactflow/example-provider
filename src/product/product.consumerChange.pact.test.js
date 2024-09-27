@@ -18,9 +18,9 @@ describe('Pact Verification', () => {
     }
   });
   it('validates the expectations of a contract required verification that has been published for this provider', () => {
-    // For builds trigged by a 'contract_requiring_verification_published' webhook, verify the changed pact against latest of mainBranch and any version currently deployed to an environment
+    // For builds triggered by a 'contract_requiring_verification_published' webhook, verify the changed pact against latest of mainBranch and any version currently deployed to an environment
     // https://docs.pact.io/pact_broker/webhooks#using-webhooks-with-the-contract_requiring_verification_published-event
-    // The URL will bave been passed in from the webhook to the CI job.
+    // The URL will have been passed in from the webhook to the CI job.
 
     if (!process.env.PACT_URL) {
       console.log('no pact url specified');
