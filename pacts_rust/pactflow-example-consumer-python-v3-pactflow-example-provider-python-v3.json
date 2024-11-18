@@ -1,0 +1,104 @@
+{
+  "consumer": {
+    "name": "pactflow-example-consumer-python-v3"
+  },
+  "interactions": [
+
+    {
+      "description": "a request to get a product",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a product with ID 10 exists"
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "path": "/product/10"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "id": "27",
+            "name": "Margharita",
+            "type": "Pizza"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      },
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "a request to delete a product",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "a product with ID 10 exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "id": "27"
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            }
+          }
+        },
+        "method": "DELETE",
+        "path": "/product/10"
+      },
+      "response": {
+        "status": 204
+      },
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pactRust": {
+      "ffi": "0.4.22",
+      "models": "1.2.3"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "pactflow-example-provider-python-v3"
+  }
+}

@@ -13,8 +13,8 @@ const baseOpts = {
 
 const setupServer = () => {
   const app = require("express")();
-  const authMiddleware = require("../middleware/auth.middleware");
-  app.use(authMiddleware);
+  // const authMiddleware = require("../middleware/auth.middleware");
+  // app.use(authMiddleware);
   app.use(require("./product.routes"));
   const server = app.listen("8080");
   return server;

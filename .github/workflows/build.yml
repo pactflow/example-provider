@@ -25,6 +25,10 @@ jobs:
         run: npm i
       - name: Test
         run: GIT_BRANCH=${GITHUB_REF:11} make test
+      - name: Test DELETE with ruby
+        run: PACT_URL=pacts_ruby/pactflow-example-consumer-python-pactflow-example-provider-python.json GIT_BRANCH=${GITHUB_REF:11} make test
+      - name: Test DELETE with rust
+        run: PACT_URL=pacts_rust/pactflow-example-consumer-python-v3-pactflow-example-provider-python-v3.json GIT_BRANCH=${GITHUB_REF:11} make test
 
   # Runs on branches as well, so we know the status of our PRs
   can-i-deploy:

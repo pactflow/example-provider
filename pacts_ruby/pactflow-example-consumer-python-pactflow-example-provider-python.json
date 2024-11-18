@@ -1,0 +1,62 @@
+{
+  "consumer": {
+    "name": "pactflow-example-consumer-python"
+  },
+  "provider": {
+    "name": "pactflow-example-provider-python"
+  },
+  "interactions": [
+    {
+      "description": "a request to get a product",
+      "providerState": "a product with ID 10 exists",
+      "request": {
+        "method": "GET",
+        "path": "/product/10"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+        },
+        "body": {
+          "id": "27",
+          "name": "Margharita",
+          "type": "Pizza"
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          }
+        }
+      }
+    },
+    {
+      "description": "a request to delete a product",
+      "providerState": "a product with ID 10 exists",
+      "request": {
+        "method": "DELETE",
+        "path": "/product/10",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "id": "27"
+        },
+        "matchingRules": {
+          "$.body": {
+            "match": "type"
+          }
+        }
+      },
+      "response": {
+        "status": 204,
+        "headers": {
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

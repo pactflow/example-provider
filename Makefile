@@ -35,7 +35,7 @@ ci: test can_i_deploy $(DEPLOY_TARGET)
 # Use this for quick feedback when playing around with your workflows.
 fake_ci: .env
 	CI=true \
-	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true \
+	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=false \
 	make ci
 
 ci_webhook: .env
@@ -43,7 +43,7 @@ ci_webhook: .env
 
 fake_ci_webhook:
 	CI=true \
-	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=true \
+	PACT_BROKER_PUBLISH_VERIFICATION_RESULTS=false \
 	make ci_webhook
 
 ## =====================

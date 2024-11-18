@@ -17,6 +17,9 @@ class ProductRepository {
     async getById(id) {
         return this.products.get(id);
     }
+    async deleteById(id) {
+        return this.products.delete(id);
+    }
 }
 
 module.exports = ProductRepository;
