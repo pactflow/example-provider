@@ -43,7 +43,7 @@ jobs:
           UNIQUE_VERSION=$(yq '.info.version' ${{ env.oas_file_location }})-${{ github.sha }}-design
           echo "version=${UNIQUE_VERSION}" >> $GITHUB_ENV
       - name: publishing ${{ env.application_name }} with ${{ env.version }} to PactFlow
-        uses: pactflow/actions/publish-provider-contract@v1.0.1
+        uses: pactflow/actions/publish-provider-contract@30956373fc3187e9c614ed8c70fde555630a2115 # v1.3.0
         env:
           oas_file: ${{ env.oas_file_location }}
           results_file: ${{ env.oas_file_location }}
@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: can-i-deploy ${{ env.application_name }} to ${{ matrix.environment }}
-        uses: pactflow/actions/can-i-deploy@v1.0.1
+        uses: pactflow/actions/can-i-deploy@30956373fc3187e9c614ed8c70fde555630a2115 # v1.3.0
         env:
           to_environment: ${{ matrix.environment }}
           version: ${{ needs.pact-publish-oas-action.outputs.version }}
