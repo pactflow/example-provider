@@ -16,7 +16,7 @@
   "devDependencies": {
     "@pact-foundation/pact": "15.0.1",
     "dotenv": "16.6.1",
-    "eslint": "9.29.0",
+    "eslint": "9.30.1",
     "jest": "30.0.4"
   },
   "license": "ISC"
