@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@pact-foundation/pact": "15.0.1",
-    "dotenv": "17.2.0",
+    "dotenv": "17.2.1",
     "eslint": "9.31.0",
     "jest": "30.0.5"
   },
