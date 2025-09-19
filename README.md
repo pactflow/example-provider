@@ -19,16 +19,17 @@ To simplify the onboarding tutorial, we have created `workshop/pactflow` branch 
 This is the second part of the onboarding tutorial. We will verify a published contract in [public tenant](https://test.pactflow.io) on PactFlow. To be able to do it from local environment, you will need to export the following environment variables into your shell:
 
 * `PACT_BROKER_TOKEN`: a valid [API token](https://docs.pactflow.io/#configuring-your-api-token) for PactFlow
-* `PACT_BROKER_BASE_URL`: a fully qualified domain name with protocol of public tenant on PactFlow `https://test.pactflow.io`
+* `PACT_URL`: a fully qualified domain name with protocol of public tenant `https://test.pactflow.io`
 
 Alternatively, you can create a `.env` file at the project root folder and put the 2 variables in. ie: 
 ```
-PACT_BROKER_BASE_URL=https://test.pactflow.io
+PACT_URL=https://test.pactflow.io
 PACT_BROKER_TOKEN=<<whatever-the-token-you-found>>
 ```
 
-Once you have the environment variables setup, you can verify the contract using the following npm command
+Please note it's `PACT_URL`, not `PACT_BROKER_BASE_URL` as specified in [example-consumer](https://github.com/pactflow/example-consumer/tree/workshop/pactflow). Although they are refering to the same thing.
 
+Once you have the environment variables setup, you can verify the contract using the following npm command
 ```
 npm run verify_pacts
 ```
