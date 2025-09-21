@@ -10,8 +10,7 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.0.1",
-    "request": "^2.88.2"
+    "express": "5.1.0"
   },
   "devDependencies": {
     "@pact-foundation/pact": "15.0.1",
