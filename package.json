@@ -7,7 +7,7 @@
     "start": "node server.js",
     "test": "jest --testTimeout 30000 --testPathIgnorePatterns consumerChange.pact.test.js",
     "test:pact": "jest --testTimeout 30000 --testMatch \"**/*.consumerChange.pact.test.js\"",
-    "verify_pacts": "GIT_COMMIT=\"$(git rev-parse HEAD)\" GIT_BRANCH=\"$(git rev-parse --abbrev-ref HEAD)\" npm run test:pact"
+    "verify_pacts": "npm run test:pact"
   },
   "dependencies": {
     "cors": "^2.8.5",

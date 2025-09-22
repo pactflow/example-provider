@@ -20,11 +20,16 @@ This is the second part of the onboarding tutorial. We will verify a published c
 
 * `PACT_BROKER_TOKEN`: a valid [API token](https://docs.pactflow.io/#configuring-your-api-token) for PactFlow
 * `PACT_URL`: a fully qualified domain name with protocol of public tenant `https://test.pactflow.io`
+* `GIT_COMMIT`: git SHA which being used as provider version
+* `GIT_BRANCH`: git branch which being used as provider branch
 
-Alternatively, you can create a `.env` file at the project root folder and put the 2 variables in. ie: 
+Alternatively, you can create a `.env` file at the project root folder and put the variables in. ie: 
+
 ```
 PACT_URL=https://test.pactflow.io
 PACT_BROKER_TOKEN=<<whatever-the-token-you-found>>
+GIT_COMMIT="$(git rev-parse HEAD)"
+GIT_BRANCH="$(git rev-parse --abbrev-ref HEAD)" 
 ```
 
 Please note it's `PACT_URL`, not `PACT_BROKER_BASE_URL` as specified in [example-consumer](https://github.com/pactflow/example-consumer/tree/workshop/pactflow). Although they are refering to the same thing.
