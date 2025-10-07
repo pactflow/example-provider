@@ -10,11 +10,10 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^5.0.1",
-    "request": "^2.88.2"
+    "express": "5.1.0"
   },
   "devDependencies": {
-    "@pact-foundation/pact": "15.0.1",
+    "@pact-foundation/pact": "16.0.0",
     "dotenv": "17.2.3",
     "eslint": "9.36.0",
     "jest": "30.2.0"
