@@ -1,3 +1,4 @@
+const Product = require("./product");
 const ProductRepository = require("./product.repository");
 
 const repository = new ProductRepository();
@@ -10,4 +11,11 @@ exports.getById = async (req, res) => {
     product ? res.send(product) : res.status(404).send({message: "Product not found"})
 };
 
+exports.create = async (req, res) => {
+  try {
+    return res.send(new Product(req.body).id);
+  } catch {
+    res.status(400).send({ message: "invalid product" });
+  }
+};
 exports.repository = repository;

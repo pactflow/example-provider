@@ -2,7 +2,7 @@ const controller = require("./product.controller");
 const Product = require("./product");
 
 const baseOpts = {
-  logLevel: "INFO",
+  logLevel: "debug",
   providerBaseUrl: "http://localhost:8080",
   providerVersion: process.env.GIT_COMMIT,
   providerVersionBranch: process.env.GIT_BRANCH, // the recommended way of publishing verification results with the branch property
@@ -12,8 +12,10 @@ const baseOpts = {
 // Setup provider server to verify
 
 const setupServer = () => {
-  const app = require("express")();
+  const express = require('express');
+  const app = express();
   const authMiddleware = require("../middleware/auth.middleware");
+  app.use(express.json());
   app.use(authMiddleware);
   app.use(require("./product.routes"));
   const server = app.listen("8080");
@@ -47,6 +49,10 @@ const requestFilter = (req, res, next) => {
     return;
   }
   req.headers["authorization"] = `Bearer ${new Date().toISOString()}`;
+  if (req.method === "POST") {
+    req['body']["foo"] = "v342234"
+    req.headers['content-length'] = Buffer.byteLength(JSON.stringify(req.body))
+  }
   next();
 };
 
