@@ -9,8 +9,10 @@ const {
 
 describe('Pact Verification', () => {
   let server;
+  let count;
   beforeAll(() => {
     server = setupServer();
+    count = 1;
   });
   afterAll(() => {
     if (server) {
@@ -31,7 +33,11 @@ describe('Pact Verification', () => {
       ...baseOpts,
       pactUrls: [process.env.PACT_URL],
       stateHandlers: stateHandlers,
-      requestFilter: requestFilter
+      requestFilter: requestFilter,
+      beforeEach: () => {
+        console.log(`Verifying interaction: ${count}`);
+        count++;
+      },
     };
 
     return new Verifier(opts).verifyProvider().then(() => {
