@@ -34,7 +34,7 @@ jobs:
         if: ${{ github.event.client_payload.pact_url }}
         with:
           ref: ${{env.GIT_COMMIT}}
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: '22'
       - run: docker pull pactfoundation/pact-cli:latest
