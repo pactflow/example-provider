@@ -36,7 +36,7 @@ jobs:
           ref: ${{env.GIT_COMMIT}}
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
-          node-version: '22'
+          node-version: '24'
       - run: docker pull pactfoundation/pact-cli:latest
       - name: Install
         run: npm i
