@@ -16,7 +16,7 @@
     "@pact-foundation/pact": "16.4.0",
     "dotenv": "17.4.2",
     "eslint": "10.3.0",
-    "jest": "30.3.0"
+    "jest": "30.4.0"
   },
   "license": "ISC"
 }
