@@ -13,7 +13,7 @@
     "express": "5.2.1"
   },
   "devDependencies": {
-    "@pact-foundation/pact": "17.0.0",
+    "@pact-foundation/pact": "17.0.1",
     "dotenv": "17.4.2",
     "eslint": "10.6.0",
     "jest": "30.4.2"
